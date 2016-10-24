@@ -19,3 +19,7 @@ func (t BuiltinType) IsNative() Boolean {
 	return t == BUILTIN_NULL || t == BUILTIN_STRING || t == BUILTIN_BOOLEAN ||
 		t == BUILTIN_BYTE || t == BUILTIN_INTEGER || t == BUILTIN_REAL
 }
+
+func (t BuiltinType) IsNumeric() Boolean {
+	return t == BUILTIN_BYTE || t == BUILTIN_INTEGER || t == BUILTIN_REAL
+}
