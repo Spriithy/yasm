@@ -1,6 +1,6 @@
 package builtins
 
-import "github.com/Spriithy/Polaroid/src/utils"
+import "github.com/Spriithy/Polaroid/old/utils"
 
 type Boolean bool
 

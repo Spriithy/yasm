@@ -1,10 +1,11 @@
 package runtime
 
 import (
-	"github.com/Spriithy/Polaroid/src/builtins"
-	"github.com/Spriithy/Polaroid/src/runtime/bytecode"
-	"github.com/Spriithy/Polaroid/src/runtime/metadata"
+	"github.com/Spriithy/Polaroid/old/builtins"
+	"github.com/Spriithy/Polaroid/old/runtime/bytecode"
+	"github.com/Spriithy/Polaroid/old/runtime/metadata"
 	"math"
+	"go/constant"
 )
 
 const (
@@ -29,6 +30,8 @@ type vm struct {
 }
 
 func (v *vm) Exec(ip int) {
+	constant.Imag()
+
 	v.ip = ip
 	v.ctx = metadata.CreateContext(nil, v.metadata[0], 0)
 	v.run()

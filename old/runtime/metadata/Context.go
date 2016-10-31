@@ -1,6 +1,6 @@
 package metadata
 
-import "github.com/Spriithy/Polaroid/src/builtins"
+import "github.com/Spriithy/Polaroid/old/builtins"
 
 type Context struct {
 	Caller   *Context

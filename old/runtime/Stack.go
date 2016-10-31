@@ -1,7 +1,7 @@
 package runtime
 
 import (
-	"github.com/Spriithy/Polaroid/src/builtins"
+	"github.com/Spriithy/Polaroid/old/builtins"
 	"os"
 )
 

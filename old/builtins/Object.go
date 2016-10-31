@@ -1,7 +1,7 @@
 package builtins
 
 import (
-	"github.com/Spriithy/Polaroid/src/utils"
+	"github.com/Spriithy/Polaroid/old/utils"
 	"fmt"
 )
 
