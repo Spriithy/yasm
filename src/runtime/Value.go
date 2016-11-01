@@ -34,8 +34,10 @@ func Wrap(val interface{}) *Value {
 func (v Value) ToString() string {
 	var d = v.data
 	switch d.(type) {
-	case uint8, int32, int64, float64:
+	case uint8, int32, int64:
 		return fmt.Sprintf("%d", d)
+	case float64:
+		return fmt.Sprintf("%f", d)
 	case bool:
 		if d.(bool) {
 			return "true"
