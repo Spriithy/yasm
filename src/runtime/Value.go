@@ -6,15 +6,27 @@ import (
 )
 
 type Value struct {
-	null, ptr bool
-	data      interface{}
+	kind Type
+	data interface{}
 }
 
 func Wrap(val interface{}) *Value {
 	if val == nil {
-		return &Value{null: true, ptr: false, data: nil}
+		return &Value{kind: nullType, data: nil}
 	}
-	return &Value{null: false, ptr: false, data: val}
+
+	var k Type
+	switch val.(type) {
+	case bool: k = booleanType
+	case uint8: k = byteType
+	case int32: k = intType
+	case int64: k = longType
+	case float64: k = floatType
+	case string: k = stringType
+	default: k = nullType
+	}
+
+	return &Value{kind: k, data: val}
 }
 
 // Object Interface implementation
@@ -120,9 +132,9 @@ func (v *Value) IsNumeric() bool {
 }
 
 func (v *Value) IsNull() bool {
-	return v.null
+	return v.kind == nullType
 }
 
 func (v *Value) IsPointer() bool {
-	return v.ptr
+	return v.kind == pointerType
 }

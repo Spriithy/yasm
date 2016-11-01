@@ -17,3 +17,8 @@ type Object interface {
 	Kind() ObjectKind
 	Implements(ObjectKind) bool
 }
+
+type Structure struct {
+	name   string
+	fields []Object
+}
