@@ -1,6 +1,9 @@
 package runtime
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/Spriithy/Polaroid/src/runtime/code"
+)
 
 const (
 	INITIAL_STACK_SIZE = 1 << 10
@@ -11,29 +14,29 @@ const (
 var stackExtensionChunk = make([]*Value, STACK_GROW_SIZE)
 
 type vm struct {
-	stack []*Value
-	sp    int
+	stack     []*Value
+	sp        int
+
+	code      []code.Bytecode
+	ip        int
+
+	frame     *ActivationRecord
+	functions []Function
 }
 
 func VirtualMachine() *vm {
 	v := new(vm)
 	v.stack = make([]*Value, INITIAL_STACK_SIZE)
 	v.sp = -1
+	v.ip = 0
 	return v
 }
 
+func (v *vm) Exec(from int) {
 
+}
 
-
-
-
-
-
-
-
-
-
-func (v *vm) Pop() *Value {
+func (v *vm) pop() *Value {
 	if len(v.stack) - v.sp > STACK_SHRINK_SIZE {
 		v.stack = v.stack[:len(v.stack) - STACK_SHRINK_SIZE]
 	}
@@ -42,7 +45,7 @@ func (v *vm) Pop() *Value {
 	return item
 }
 
-func (v *vm) Push(item interface{}) {
+func (v *vm) push(item interface{}) {
 	if len(v.stack) - v.sp < 1 {
 		v.stack = append(v.stack, stackExtensionChunk ...)
 	}
