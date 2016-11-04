@@ -98,9 +98,17 @@ func (v *vm) run() {
 			v.ip = v.frame.retip
 			v.frame = v.frame.caller
 
-		case code.LOAD: // TODO
-		case code.STORE: // TODO
+		case code.LOAD: v.load()
+		case code.STORE: v.store()
 
+		case code.AGET: //
+		case code.ASET: //
+		
+		case code.NEW:  //
+		case code.FGET: //
+		case code.FSET: //
+
+		// Conversion
 		case code.B2I:
 			v1 := v.pop().Byte()
 			v.push((int32)(v1))
@@ -380,6 +388,18 @@ func (v *vm) run() {
 			}
 		}
 	}
+}
+
+func (v *vm) load() {
+	regnum := v.code[v.ip]
+	v.push(v.frame.locals[regnum].(*Value).data)
+	v.ip++
+}
+
+func (v *vm) store() {
+	regnum := v.code[v.ip]
+	v.frame.locals[regnum] = v.pop()
+	v.ip++
 }
 
 func (v *vm) pop() *Value {
