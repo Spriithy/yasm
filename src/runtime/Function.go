@@ -1,6 +1,6 @@
 package runtime
 
 type Function struct {
-	name  string
-	entry int
+	name                string
+	entry, nargs, nlocs int
 }
