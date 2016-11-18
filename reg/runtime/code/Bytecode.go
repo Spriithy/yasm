@@ -1,5 +1,7 @@
 package code
 
+// A Bytecode is the byte's representation of an internal instruction
+// of the VM.
 type Bytecode byte
 
 const (
