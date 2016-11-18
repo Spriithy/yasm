@@ -1,4 +1,4 @@
-package runtime
+package obj
 
 // RObject is the internal representation of what can be an Object
 type RObject interface {

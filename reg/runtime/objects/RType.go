@@ -1,4 +1,4 @@
-package runtime
+package obj
 
 // RType is used to identify both builtin and user defined data types
 type RType uint
