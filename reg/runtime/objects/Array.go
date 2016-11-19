@@ -5,6 +5,8 @@ import (
 	"sync"
 )
 
+// Array is the natural array data-structure with a finite amount
+// of elements.
 type Array struct {
 	size int
 	sync.RWMutex
@@ -15,7 +17,7 @@ type Array struct {
 // internal object with its Read/Write Mutex lock.
 func CreateArray(size int) (*Array, error) {
 	if size < 1 {
-		return nil, errors.New("array size must be positive")
+		return nil, errors.New("array size must be a positive integer")
 	}
 
 	a := &Array{size: size, array: make([]Any, size)}
