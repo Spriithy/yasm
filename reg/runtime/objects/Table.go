@@ -29,11 +29,6 @@ func (t *Table) Copy() Any {
 	return &Table{table: t.table}
 }
 
-// Zero returns the zero-value of the table type
-func (t *Table) Zero() Any {
-	return CreateTable()
-}
-
 // Read reads a pair value from the table using its key
 // It either return nil, false if the key is not found
 // Or value, true if it is

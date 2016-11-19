@@ -1,28 +1,30 @@
 package main
 
-import . "github.com/Spriithy/Polaroid/reg/runtime/objects"
+import (
+	. "github.com/Spriithy/Polaroid/reg/runtime/objects"
+	colors "github.com/Spriithy/go-colors"
+)
+
+func check(e error) {
+	if e != nil {
+		println(colors.Red(colors.None, e))
+		panic(e)
+	}
+}
 
 func main() {
 
 	dim := 5
 
-	defa, _ := CreateArray(0, Int(0))
-	a, err := CreateArray(dim, defa.Zero())
-
-	if err != nil {
-		panic(err)
-	}
+	a, err := CreateArray(dim, "null")
+	check(err)
 
 	for i := 0; i < dim; i++ {
-		c, _ := CreateArray(dim, Int(0))
-		err = c.Write(i, Int(1))
-		if err != nil {
-			panic(err)
-		}
-		err = a.Write(i, c)
-		if err != nil {
-			panic(err)
-		}
+		col, err := CreateArray(dim, "int")
+		check(err)
+		err = col.Write(i, Int(1))
+		check(err)
+		a.Write(i, col)
 	}
 
 	println(a.Class(), a.String())

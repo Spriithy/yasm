@@ -67,21 +67,6 @@ func (n *Number) Class() string {
 	}
 }
 
-// Zero returns the 0-value of the number's type
-func (n *Number) Zero() Any {
-	switch n.T {
-	case ByteType:
-		return Byte(0)
-	case IntType:
-		return Int(0)
-	case UIntType:
-		return UInt(0)
-	case FloatType:
-		return Float(0)
-	}
-	return Int(0)
-}
-
 // Byte is used to recover the byte value of the number uncast
 func (n *Number) Byte() (byte, error) {
 	if n.T != ByteType {

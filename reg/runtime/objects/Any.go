@@ -5,5 +5,4 @@ type Any interface {
 	Class() string
 	String() string
 	Copy() Any
-	Zero() Any
 }

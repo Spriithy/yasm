@@ -28,11 +28,6 @@ func (s *StringLit) Copy() Any {
 	return &StringLit{size: s.size, bytes: s.bytes}
 }
 
-// Zero returns the internal empty string
-func (s *StringLit) Zero() Any {
-	return String("")
-}
-
 // Read is used to read a character (byte) in the source string
 // It returns an "Index out of bounds" error if the index is negative or
 // larger than the string's size

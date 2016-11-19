@@ -13,11 +13,6 @@ func (n Null) String() string {
 	return "null"
 }
 
-// Zero returns the 0-value of the Null type
-func (n Null) Zero() Any {
-	return &Null{}
-}
-
 // Copy returns a copy of the Null Object
 func (n Null) Copy() Any {
 	return Null{}
