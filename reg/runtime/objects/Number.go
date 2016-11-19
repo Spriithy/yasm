@@ -3,29 +3,28 @@ package objects
 import (
 	"errors"
 	"fmt"
-	"math"
 )
 
-// Numeric is used to denote any numeric type
-type Numeric byte
+// NumericType is used to denote any numeric type
+type NumericType byte
 
 const (
-	// TypeByte is the byte type numeric constant
-	TypeByte = Numeric(iota)
+	// ByteType is the byte type numeric constant
+	ByteType = NumericType(iota)
 
-	// TypeInt is the int type numeric constant
-	TypeInt
+	// IntType is the int type numeric constant
+	IntType
 
-	// TypeUInt is the unsigned int type numeric constant
-	TypeUInt
+	// UIntType is the unsigned int type numeric constant
+	UIntType
 
-	// TypeFloat is the float type numeric constant
-	TypeFloat
+	// FloatType is the float type numeric constant
+	FloatType
 )
 
 // Number is the internal representation for a Number
 type Number struct {
-	T Numeric // The Numeric type being stored
+	T NumericType // The Numeric type being stored
 	b byte
 	i int64
 	u uint64
@@ -34,43 +33,58 @@ type Number struct {
 
 // Byte wraps a byte into a runtime Number
 func Byte(b byte) *Number {
-	return &Number{T: TypeByte, b: b}
+	return &Number{T: ByteType, b: b}
 }
 
 // Int wraps an integer into a runtime Number
 func Int(i int64) *Number {
-	return &Number{T: TypeInt, i: i}
+	return &Number{T: IntType, i: i}
 }
 
 // UInt wraps an unsigned integer into a runtime Number
 func UInt(u uint64) *Number {
-	return &Number{T: TypeUInt, u: u}
+	return &Number{T: UIntType, u: u}
 }
 
 // Float wraps a floating point number into a runtime Number
 func Float(f float64) *Number {
-	return &Number{T: TypeFloat, f: f}
+	return &Number{T: FloatType, f: f}
 }
 
 // Class returns the numeric name type of the Number
 func (n *Number) Class() string {
 	switch n.T {
-	case TypeByte:
+	case ByteType:
 		return "byte"
-	case TypeInt:
+	case IntType:
 		return "int"
-	case TypeUInt:
+	case UIntType:
 		return "uint"
-	case TypeFloat:
+	case FloatType:
 		return "float"
 	default:
 		return "number"
 	}
 }
 
+// Zero returns the 0-value of the number's type
+func (n *Number) Zero() Any {
+	switch n.T {
+	case ByteType:
+		return Byte(0)
+	case IntType:
+		return Int(0)
+	case UIntType:
+		return UInt(0)
+	case FloatType:
+		return Float(0)
+	}
+	return Int(0)
+}
+
 // Byte is used to recover the byte value of the number uncast
 func (n *Number) Byte() (byte, error) {
-	if n.T != TypeByte {
+	if n.T != ByteType {
 		return 0, errors.New("number is not byte")
 	}
 	return n.b, nil
@@ -78,7 +92,7 @@ func (n *Number) Byte() (byte, error) {
 
 // Int is used to recover the int value of the number uncast
 func (n *Number) Int() (int64, error) {
-	if n.T != TypeInt {
+	if n.T != IntType {
 		return 0, errors.New("number is not int")
 	}
 	return n.i, nil
@@ -86,7 +100,7 @@ func (n *Number) Int() (int64, error) {
 
 // UInt is used to recover the unsigned int value of the number uncast
 func (n *Number) UInt() (uint64, error) {
-	if n.T != TypeUInt {
+	if n.T != UIntType {
 		return 0, errors.New("number is not uint")
 	}
 	return n.u, nil
@@ -94,7 +108,7 @@ func (n *Number) UInt() (uint64, error) {
 
 // Float is used to recover the float value of the number uncast
 func (n *Number) Float() (float64, error) {
-	if n.T != TypeByte {
+	if n.T != ByteType {
 		return 0, errors.New("number is not float")
 	}
 	return n.f, nil
@@ -107,81 +121,40 @@ func (n *Number) Copy() Any {
 
 // Cast allows the virtual machine to cast the Number into another
 // Numeric type.
-func (n *Number) Cast(t Numeric) {
+func (n *Number) Cast(t NumericType) {
 	switch t {
-	case TypeByte:
-		switch n.T {
-		case TypeInt:
-			n.b = byte(n.i % math.MaxUint8)
-			n.i = 0
-		case TypeUInt:
-			n.b = byte(n.u % math.MaxUint8)
-			n.u = 0
-		case TypeFloat:
-			n.b = byte(n.f)
-			n.f = 0
-		default:
-		}
-	case TypeInt:
-		switch n.T {
-		case TypeByte:
-			n.i = int64(n.b)
-			n.b = 0
-		case TypeUInt:
-			n.i = int64(n.u)
-			n.u = 0
-		case TypeFloat:
-			n.i = int64(n.f)
-			n.f = 0
-		default:
-		}
-	case TypeUInt:
-		switch n.T {
-		case TypeByte:
-			n.u = uint64(n.b)
-			n.b = 0
-		case TypeInt:
-			n.u = uint64(n.i)
-			n.i = 0
-		case TypeFloat:
-			n.u = uint64(n.f)
-			n.f = 0
-		default:
-		}
-	case TypeFloat:
-		switch n.T {
-		case TypeByte:
-			n.f = float64(n.b)
-			n.b = 0
-		case TypeInt:
-			n.f = float64(n.i)
-			n.i = 0
-		case TypeUInt:
-			n.f = float64(n.u)
-			n.u = 0
-		default:
-		}
+	case ByteType:
+		n.f = float64(n.b)
+		n.b = 0
+	case IntType:
+		n.f = float64(n.i)
+		n.i = 0
+	case UIntType:
+		n.f = float64(n.u)
+		n.u = 0
+	default:
 	}
 	n.T = t
 }
 
 // CastCopy allows the virtual machine to use the value as another type
 // without losing its original information
-func (n *Number) CastCopy(t Numeric) *Number {
+func (n *Number) CastCopy(t NumericType) *Number {
 	nn := n.Copy().(*Number)
 	nn.Cast(t)
 	return nn
 }
 
+// Returns the print-friendly version of the number being stored
 func (n *Number) String() string {
 	switch n.T {
-	case TypeByte:
+	case ByteType:
 		return fmt.Sprintf("%d", n.b)
-	case TypeInt:
+	case IntType:
 		return fmt.Sprintf("%d", n.i)
-	case TypeUInt:
+	case UIntType:
 		return fmt.Sprintf("%d", n.u)
-	case TypeFloat:
+	case FloatType:
 		return fmt.Sprintf("%f", n.f)
 	default:
 		return "0"
