@@ -15,9 +15,7 @@ func makeZeroTable() Any {
 var builtinZeros = map[string]Any{
 	"null":   Null{},
 	"bool":   Bool(false),
-	"byte":   Byte(0),
 	"int":    Int(0),
-	"uint":   UInt(0),
 	"float":  Float(0),
 	"string": String(""),
 	"array":  makeZeroArray(),
