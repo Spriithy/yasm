@@ -37,10 +37,7 @@ func CreateArray(size int, of string) (*Array, error) {
 // Class is used to return the class name of any object
 // Array Class name depends on the data being stored in it
 func (a *Array) Class() string {
-	if a.size != 0 {
-		return a.array[0].Class() + "[]"
-	}
-	return "array[]"
+	return a.of + "[]"
 }
 
 // Copy returns a Copy of the current Array
@@ -74,6 +71,10 @@ func (a *Array) Write(idx int, val Any) error {
 
 	if valc != a.of && a.of != "null" {
 		return errors.New("array type mismatch expected: " + a.of + " got " + valc)
+	}
+
+	if a.of == (Null{}).Class() {
+		a.of = val.Class()
 	}
 
 	a.array[idx] = val.Copy()
