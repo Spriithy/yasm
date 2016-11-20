@@ -47,6 +47,8 @@ Let's analyze the `add eax, 21, [r2]` instruction that is just `eax = 21 + *r2;`
 Assuming the `add` opcode is right, it is compiled down to:
 
 ```
+   OPCODE  Fx        Gx         Rx
+
       add  eax        21        [r2]
 0010 1100  0000 0100  0101 0101 1000 1101
            ^^         ^^        ^^
