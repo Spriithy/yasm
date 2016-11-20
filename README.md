@@ -4,7 +4,7 @@ The Polaroid Virtual Machine, written in Go
 
 ## Virtual Machine registers
 
-| Registers | Description | Stord in AR |
+| Registers | Description | Stored in AR |
 |---:|:---|:---:|
 | `pc` |  Program Counter | no |
 | `esp` |  Stack Pointer | no |
@@ -59,3 +59,21 @@ Assuming the `add` opcode is right, it is compiled down to:
 ```
 
 ## Assembler specifications
+
+* `R` is the symbol for _any register_
+* `K` is the symbol for _constant index_
+* `A` is the symbol for _address_
+
+| Instruction  name | Operands | Fx | Gx | Rx | Description |
+|------------------:|:---:|:-----:|:-----:|:-----:|:---|
+| **Memory related**|     |       |       |       |    |
+| `mov`             |   2 | `RA`  | `RKA` | -     | Moves the 2nd operand value or pointer to first operand |
+| **Arithmetic**    |     |       |       |       |    |
+| `add`             |   3 | `RA`  | `RKA` | `RKA` | Adds two integers from constants or registers into the first register |
+| `sub`             |   3 | `RA`  | `RKA` | `RKA` | Subtracts two integers |
+| `mul`             |   3 | `RA`  | `RKA` | `RKA` | Multiplies two integers |
+| `pow`             |   2 | `RA`  | `RKA` | -     | Exponentiation |
+| `div`             |   3 | `RA`  | `RK`  | `RK`  | Divides two integers |
+| `rem`             |   3 | `RA`  | `RK`  | `RK`  | Computes the remainder |
+| `inc`             |   1 | `RA`  | -     | -     | Increments a register |
+| `dec`             |   1 | `RA`  | -     | -     | Decrements a register |
