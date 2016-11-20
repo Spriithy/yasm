@@ -12,7 +12,4 @@ func main() {
 	a.Set(3, Int(8))
 	println(t.Class(), t.String())
 	println(a.Class(), a.String())
-
-	e := Enum("Foo", "Bar", 3)
-	println(e.Class(), e.String())
 }
