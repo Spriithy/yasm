@@ -84,6 +84,11 @@ Assuming the `add` opcode is right, it is compiled down to:
 | `[cif]sub`        |   3 | `RA`  | `RKA` | `RKA` | Subtracts two numbers |
 | `[cif]mul`        |   3 | `RA`  | `RKA` | `RKA` | Multiplies two numbers |
 | `[cif]div`        |   3 | `RA`  | `RKA` | `RKA` | Divides two numbers |
+| `[ci]rem`         |   3 | `RA`  | `RKA` | `RKA` | Remainder of two numbers |
+| `[ci]inc`         |   3 | `RA`  | `RKA` | `RKA` | Increment by one |
+| `[ci]dec`         |   3 | `RA`  | `RKA` | `RKA` | Decrement by one |
+| `[ci]shr`         |   3 | `RA`  | `RKA` | `RKA` | Right bit shift |
+| `[ci]shl`         |   3 | `RA`  | `RKA` | `RKA` | Left bit shift |
 | **Logic**         |     |       |       |       | Note that a version of these exist for each of the `Char`, `Int`, `Float` types unless specified otherwise |
 | `eq`              |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on equality of operands |
 | `neq`             |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
@@ -103,5 +108,3 @@ Assuming the `add` opcode is right, it is compiled down to:
 | `brf`             |   1 | `K`   | -     | -     | Branch if `tr` holds `FAKSE`|
 | `brn`             |   1 | `K`   | -     | -     | Branch if `tr` holds `NULL` |
 | `blp`             |   1 | `K`   | -     | -     | Branch to `lpc` |
-
- 
