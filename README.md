@@ -53,7 +53,7 @@ Assuming the `add` opcode is right, it is compiled down to:
 0010 1100  0000 0100  0101 0101 1000 1101
            ^^         ^^        ^^
             |          |         |
-            |          |        10 : refers to what is stored in r2
+            |          |        10 : refers to what is stored at the address stored in r2
             |         01 : refers to a constant
            00 : refers to a register
 ```
