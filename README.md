@@ -40,10 +40,10 @@ bits   0      2                  8
 Where type is :
 
 * `00` if the operand refers to a register
-* `01` if the operand refers to a constant (up to 2^6 - 1)
+* `01` if the operand refers to a constant (up to 2^6 - 1) in the pool
 * `10` if the operand refers to a the memory address stored in the given register
 
-Let's analyze the `add eax, 21, [r2]` instruction that is just `eax = 21 + *r2;`.
+Let's analyze the `add eax, 21, [r2]` instruction that is just `eax = k[21] + *r2;`, where `k` is the constant pool.
 Assuming the `add` opcode is right, it is compiled down to:
 
 ```
@@ -54,7 +54,7 @@ Assuming the `add` opcode is right, it is compiled down to:
            ^^         ^^        ^^
             |          |         |
             |          |        10 : refers to what is stored at the address stored in r2
-            |         01 : refers to a constant
+            |         01 : refers to a constant (the 21st)
            00 : refers to a register
 ```
 
