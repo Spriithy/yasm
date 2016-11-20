@@ -13,7 +13,7 @@ The Polaroid Virtual Machine, written in Go
 | `eax` `ebx` `ecx` `edx` | General purpose registers | no |
 | `lpc` | Last Program Counter | yes |
 | `ltp` |  Last This Pointer | yes |
-| `r0 ... r32` | Local variable registers | yes |
+| `r0 ... r31` | Local variable registers | yes |
 
 This means that the machine itself provides the `pc`, `esp`, `tp` and `me` registers
 but `eax`, `ebx`, `ecx`, `edx`, `ltp` are referenced in each Activation Record.
@@ -26,9 +26,9 @@ the parameters passed to the function. `r0` holds the number of arguments that w
 Each assembler instruction has from 0 to 3 operands that can either be registers, constants
 or memory references (pointers). Each operand is label using this convention :
 
-* `Fx` is the first operand
-* `Gx` is the second operand
-* `Rx` is the third operand
+* `A` is the first operand
+* `B` is the second operand
+* `C` is the third operand
 
 For a whole instruction must hold in 32 bits, each operand must be 8 bits long. An operand binary representation is as follows :
 
@@ -47,7 +47,7 @@ Let's analyze the `add eax, 21, [r2]` instruction that is just `eax = k[21] + *r
 Assuming the `add` opcode is right, it is compiled down to:
 
 ```
-   OPCODE  Fx         Gx        Rx
+   OPCODE  A          B         C 
 
       add  eax        21        [r2]
 0010 1100  0000 0100  0101 0101 1000 1101
@@ -64,10 +64,11 @@ Assuming the `add` opcode is right, it is compiled down to:
 * `K` is the symbol for _constant index_
 * `A` is the symbol for _address_
 
-| Instruction  name | Operands | Fx | Gx | Rx | Description |
-|------------------:|:---:|:-----:|:-----:|:-----:|:---|
+| Instruction  name | Operands | A | B | C | Description |
+|:-----------------:|:---:|:-----:|:-----:|:-----:|:---|
 | **Memory related**|     |       |       |       |    |
 | `mov`             |   2 | `RA`  | `RKA` | -     | Moves the 2nd operand value or pointer to first operand |
+| `swp`             |   2 | `RA`  | `RA`  | -     | Swaps the two operands values |
 | **Arithmetic**    |     |       |       |       |    |
 | `add`             |   3 | `RA`  | `RKA` | `RKA` | Adds two integers from constants or registers into the first register |
 | `sub`             |   3 | `RA`  | `RKA` | `RKA` | Subtracts two integers |
