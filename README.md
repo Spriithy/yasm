@@ -21,7 +21,7 @@ That is, each time an AR is generated, `pc` is transfered in the new `tpc` and s
 goes for `tp` being copied in `ltp`. `r1` and all successive registers are allocated to
 the parameters passed to the function. `r0` holds the number of arguments that were passed.
 
-## Assembler language
+## Assembler instructions
 
 Each assembler instruction has from 0 to 3 operands that can either be registers, constants
 or memory references (pointers). Each operand is label using this convention :
@@ -47,7 +47,7 @@ Let's analyze the `add eax, 21, [r2]` instruction that is just `eax = 21 + *r2;`
 Assuming the `add` opcode is right, it is compiled down to:
 
 ```
-   OPCODE  Fx        Gx         Rx
+   OPCODE  Fx         Gx        Rx
 
       add  eax        21        [r2]
 0010 1100  0000 0100  0101 0101 1000 1101
@@ -57,3 +57,5 @@ Assuming the `add` opcode is right, it is compiled down to:
             |         01 : refers to a constant
            00 : refers to a register
 ```
+
+## Assembler specifications
