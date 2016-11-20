@@ -65,16 +65,22 @@ Assuming the `add` opcode is right, it is compiled down to:
 * `A` is the symbol for _address_
 
 | Instruction  name | Operands | A | B | C | Description |
-|:-----------------:|:---:|:-----:|:-----:|:-----:|:---|
-| **Memory related**|     |       |       |       |    |
+|------------------:|:---:|:-----:|:-----:|:-----:|:---|
+| **Memory related**|     |       |       |       ||
 | `mov`             |   2 | `RA`  | `RKA` | -     | Moves the 2nd operand value or pointer to first operand |
 | `swp`             |   2 | `RA`  | `RA`  | -     | Swaps the two operands values |
-| **Arithmetic**    |     |       |       |       |    |
-| `add`             |   3 | `RA`  | `RKA` | `RKA` | Adds two integers from constants or registers into the first register |
-| `sub`             |   3 | `RA`  | `RKA` | `RKA` | Subtracts two integers |
-| `mul`             |   3 | `RA`  | `RKA` | `RKA` | Multiplies two integers |
+| `ptr`             |   2 | `RA`  | `RA`  | -     | Place the address of the first operand in the second one |
+| **Arithmetic**    |     |       |       |       ||
+| `neg`             |   2 | `RA`  | `RKA` | -     | Places the negated given number into the register |
+| `not`             |   2 | `RA`  | `RK`  | -     | Two's complement for integers, logical for booleans |
 | `pow`             |   2 | `RA`  | `RKA` | -     | Exponentiation |
-| `div`             |   3 | `RA`  | `RK`  | `RK`  | Divides two integers |
-| `rem`             |   3 | `RA`  | `RK`  | `RK`  | Computes the remainder |
-| `inc`             |   1 | `RA`  | -     | -     | Increments a register |
-| `dec`             |   1 | `RA`  | -     | -     | Decrements a register |
+| `add`             |   3 | `RA`  | `RKA` | `RKA` | Adds two numbers from constants or registers into the first register |
+| `sub`             |   3 | `RA`  | `RKA` | `RKA` | Subtracts two numbers |
+| `mul`             |   3 | `RA`  | `RKA` | `RKA` | Multiplies two numbers |
+| `div`             |   3 | `RA`  | `RK`  | `RK`  | Divides two numbers |
+| `or`              |   3 | `RA`  | `RK`  | `RK`  | `or` between two int-based numbers |
+| `and`             |   3 | `RA`  | `RK`  | `RK`  | `and` between two int-based numbers |
+| `xor`             |   3 | `RA`  | `RK`  | `RK`  | `xor` between two int-based numbers |
+| **logic**         |     |       |       |       ||
+| `eq`              |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on equality of operands |
+| `neq`             |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
