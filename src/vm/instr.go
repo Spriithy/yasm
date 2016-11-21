@@ -45,7 +45,7 @@ func decode(src uint32) instr {
 		_, _, b0, b1 := uint32ToBytes(src & rArgMask)
 		println(opName[op], opName[rd], opName[rs0], opName[rs1], int16FromBytes(b0, b1))
 		return &rInstr{op, rd, rs0, rs1, int32FromBytes(0, 0, b0, b1)}
-	case op < opcodeMax:
+	case op < opcodeMax: // B. Instructions
 		_, b0, b1, b2 := uint32ToBytes(src & bArgMask)
 		println(opName[op], int32FromBytes(0, b0, b1, b2))
 		return &bInstr{op, int32FromBytes(0, b0, b1, b2)}
