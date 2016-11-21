@@ -1,7 +1,5 @@
 package vm
 
-import "strconv"
-
 // BRI Instruction format
 //
 // B. Instructions
@@ -21,36 +19,36 @@ import "strconv"
 //
 
 var (
-	rdMask   int32 = 0x3E00000
-	rs0Mask  int32 = 0x1F0000
-	rs1Mask  int32 = 0xF800
-	iArgMask int32 = 0xFFFF
-	rArgMask int32 = 0x7FF
+	rdMask   uint32 = 0x3E00000
+	rs0Mask  uint32 = 0x1F0000
+	rs1Mask  uint32 = 0xF800
+	iArgMask uint32 = 0xFFFF
+	rArgMask uint32 = 0x7FF
+	bArgMask uint32 = 0x3FFFFFF
 )
 
-func decode(src int32) instr {
+func decode(src uint32) instr {
 	op := byte(src >> 26)
-	println(strconv.FormatInt(int64(src), 2))
 	switch {
 	case op > opcodeMax:
 		return nil
 	case op < _r: // Immediate instruction case
 		rd := byte((src & rdMask) >> 21)
 		rs0 := byte((src & rs0Mask) >> 16)
-		arg := int32((src & iArgMask))
-		println(opName[op], opName[rd], opName[rs0], arg)
-		return &iInstr{op, rd, rs0, arg}
+		arg := src & iArgMask
+		println(opName[op], opName[rd], opName[rs0], int32(arg))
+		return &iInstr{op, rd, rs0, int32(arg)}
 	case op < _b: // R. Instructions
 		rd := byte((src & rdMask) >> 21)
 		rs0 := byte((src & rs0Mask) >> 16)
 		rs1 := byte((src & rs1Mask) >> 11)
-		arg := src & rArgMask
-		println(opName[op], opName[rd], opName[rs0], opName[rs1], arg)
-		return &rInstr{op, rd, rs0, rs1, arg}
+		_, _, b0, b1 := uint32ToBytes(src & rArgMask)
+		println(opName[op], opName[rd], opName[rs0], opName[rs1], int16FromBytes(b0, b1))
+		return &rInstr{op, rd, rs0, rs1, int32FromBytes(0, 0, b0, b1)}
 	case op < opcodeMax:
-		arg := src << 6 >> 26
-		println(opName[op], arg)
-		return &bInstr{op, arg}
+		_, b0, b1, b2 := uint32ToBytes(src & bArgMask)
+		println(opName[op], int32FromBytes(0, b0, b1, b2))
+		return &bInstr{op, int32FromBytes(0, b0, b1, b2)}
 	}
 	return nil
 }

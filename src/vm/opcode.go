@@ -54,7 +54,7 @@ const (
 	_b = b
 
 	// Last valid opcode
-	opcodeMax = 2<<6 - 1
+	opcodeMax = 1<<6 - 1
 
 	//
 )
