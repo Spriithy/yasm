@@ -73,6 +73,7 @@ Assuming the `add` opcode is right, it is compiled down to:
 
 | Instruction  name | Operands | A | B | C | Description |
 |------------------:|:---:|:-----:|:-----:|:-----:|:---|
+| `hlt`             |   0 | -     | -     | -     | Halts the execution |
 | **Memory related**|     |       |       |       ||
 | `mov`             |   2 | `RA`  | `RKA` | -     | Moves the 2nd operand value or pointer to first operand |
 | `swp`             |   2 | `RA`  | `RA`  | -     | Swaps the two operands values |
