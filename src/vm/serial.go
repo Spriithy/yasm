@@ -24,10 +24,10 @@ func uint16FromBytes(b0, b1 byte) uint16 {
 	return uint16(b0)<<8 | uint16(b1)
 }
 
-func uint16ToBytes(i0 uint16) (byte, byte) {
+func uint16ToBytes(i0 uint16) (b0, b1 byte) {
 	return byte(i0 >> 8), byte(i0 & 0x00FF)
 }
 
-func int16ToBytes(i0 int16) (byte, byte) {
+func int16ToBytes(i0 int16) (b0, b1 byte) {
 	return byte(i0 >> 8), byte(i0 & 0x00FF)
 }
