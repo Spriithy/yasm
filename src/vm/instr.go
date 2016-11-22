@@ -1,5 +1,7 @@
 package vm
 
+import "fmt"
+
 // BRI Instruction format
 //
 // B. Instructions
@@ -36,19 +38,18 @@ func decode(src uint32) instr {
 		rd := byte((src & rdMask) >> 21)
 		rs0 := byte((src & rs0Mask) >> 16)
 		arg := src & iArgMask
-		println(opName[op], opName[rd], opName[rs0], int32(arg))
 		return &iInstr{op, rd, rs0, int32(arg)}
 	case op < _b: // R. Instructions
 		rd := byte((src & rdMask) >> 21)
 		rs0 := byte((src & rs0Mask) >> 16)
 		rs1 := byte((src & rs1Mask) >> 11)
-		_, _, b0, b1 := uint32ToBytes(src & rArgMask)
-		println(opName[op], opName[rd], opName[rs0], opName[rs1], int16FromBytes(b0, b1))
-		return &rInstr{op, rd, rs0, rs1, int32FromBytes(0, 0, b0, b1)}
+		x := DoubleWord(src & rArgMask)
+		return &rInstr{op, rd, rs0, rs1, int32(x.Word(0).Int16())}
 	case op < opcodeMax: // B. Instructions
-		_, b0, b1, b2 := uint32ToBytes(src & bArgMask)
-		println(opName[op], int32FromBytes(0, b0, b1, b2))
-		return &bInstr{op, int32FromBytes(0, b0, b1, b2)}
+		x := DoubleWord(src & bArgMask)
+		b0, b1, b2 := x.Byte(0), x.Byte(1), x.Byte(2)
+		y := int32(*b0) | int32(b1.Word(1).Int16()) | b2.DoubleWord(3).Int32()
+		return &bInstr{op, y}
 	}
 	return nil
 }
@@ -62,6 +63,7 @@ const (
 type instr interface {
 	format() byte
 	opcode() byte
+	string() string
 }
 
 type bInstr struct {
@@ -96,6 +98,10 @@ func (i *bInstr) extra() int32 {
 	return i.arg
 }
 
+func (i *bInstr) string() string {
+	return fmt.Sprintf("%5s\t#(0x%X)", opName[i.op], i.arg)
+}
+
 func (i *rInstr) format() byte {
 	return rFormat
 }
@@ -116,6 +122,10 @@ func (i *rInstr) src1() byte {
 	return i.rs1
 }
 
+func (i *rInstr) string() string {
+	return fmt.Sprintf("%5s\tr%d, r%d, r%d, #(0x%X)", opName[i.op], i.rd, i.rs0, i.rs1, i.arg)
+}
+
 func (i *iInstr) format() byte {
 	return iFormat
 }
@@ -134,4 +144,8 @@ func (i *iInstr) src0() byte {
 
 func (i *iInstr) extra() int32 {
 	return i.arg
+}
+
+func (i *iInstr) string() string {
+	return fmt.Sprintf("%5s\tr%d, r%d, #(0x%X)", opName[i.op], i.rd, i.rs0, i.arg)
 }
