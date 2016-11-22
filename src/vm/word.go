@@ -1,13 +1,11 @@
 package vm
 
 import (
-	"os"
-
 	"fmt"
-
+	"os"
 	"unsafe"
 
-	colors "github.com/Spriithy/go-colors"
+	"github.com/Spriithy/go-colors"
 )
 
 func assert(cond bool, msg string) {
