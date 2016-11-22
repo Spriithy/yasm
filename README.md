@@ -74,38 +74,5 @@ Assuming the `add` opcode is right, it is compiled down to:
 | Instruction  name | Operands | A | B | C | Description |
 |------------------:|:---:|:-----:|:-----:|:-----:|:---|
 | `hlt`             |   0 | -     | -     | -     | Halts the execution |
-| **Memory related**|     |       |       |       ||
-| `mov`             |   2 | `RA`  | `RKA` | -     | Moves the 2nd operand value or pointer to first operand |
-| `swp`             |   2 | `RA`  | `RA`  | -     | Swaps the two operands values |
-| `ptr`             |   2 | `RA`  | `RA`  | -     | Place the address of the first operand in the second one |
-| **Arithmetic**    |     |       |       |       | Note that a version of these exist for each of the `Char`, `Int`, `Float` types unless specified otherwise |
-| `[if]neg`         |   2 | `RA`  | `RKA` | -     | Places the negated given number into the register |
-| `[if]pow`         |   2 | `RA`  | `RKA` | -     | Exponentiation |
-| `[cif]add`        |   3 | `RA`  | `RKA` | `RKA` | Adds two numbers from constants or registers into the first register |
-| `[cif]sub`        |   3 | `RA`  | `RKA` | `RKA` | Subtracts two numbers |
-| `[cif]mul`        |   3 | `RA`  | `RKA` | `RKA` | Multiplies two numbers |
-| `[cif]div`        |   3 | `RA`  | `RKA` | `RKA` | Divides two numbers |
-| `[ci]rem`         |   3 | `RA`  | `RKA` | `RKA` | Remainder of two numbers |
-| `[ci]inc`         |   3 | `RA`  | `RKA` | `RKA` | Increment by one |
-| `[ci]dec`         |   3 | `RA`  | `RKA` | `RKA` | Decrement by one |
-| `[ci]shr`         |   3 | `RA`  | `RKA` | `RKA` | Right bit shift |
-| `[ci]shl`         |   3 | `RA`  | `RKA` | `RKA` | Left bit shift |
-| **Logic**         |     |       |       |       | Note that a version of these exist for each of the `Char`, `Int`, `Float` types unless specified otherwise |
-| `eq`              |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on equality of operands |
-| `neq`             |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
-| `[cif]lt`         |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
-| `[cif]gt`         |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
-| `[cif]leq`        |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
-| `[cif]geq`        |   3 | `RA`  | `RKA` | `RKA` | places `TRUE` or `FALSE` in register depending on non-equality of operands |
-| `[.ci]or`         |   3 | `RA`  | `RKA` | `RKA` | `or` between two int-based numbers |
-| `[.ci]and`        |   3 | `RA`  | `RKA` | `RKA` | `and` between two int-based numbers |
-| `[.ci]xor`        |   3 | `RA`  | `RKA` | `RKA` | `xor` between two int-based numbers |
-| `[.i]not`         |   2 | `RA`  | `RKA` | -     | Two's complement for integer, logical for booleans |
-| **Branching**     |     |       |       |       | All the tests use the `tr` register |
-| `b`               |   1 | `K`   | -     | -     | Branch to constant offset (constant is a 24-bits signed integer) |
-| `bz`              |   1 | `K`   | -     | -     | Branch if `tr` is zero |
-| `bnz`             |   1 | `K`   | -     | -     | Branch if `tr` is not zero |
-| `brt`             |   1 | `K`   | -     | -     | Branch if `tr` holds `TRUE` |
-| `brf`             |   1 | `K`   | -     | -     | Branch if `tr` holds `FAKSE`|
-| `brn`             |   1 | `K`   | -     | -     | Branch if `tr` holds `NULL` |
-| `blp`             |   1 | `K`   | -     | -     | Branch to `lpc` |
+
+### Whole stuff has changed
