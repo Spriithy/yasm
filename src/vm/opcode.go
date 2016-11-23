@@ -1,8 +1,17 @@
 package vm
 
 const (
-	// Begin I. typed instructions with mov
-	Mov = byte(iota) // Move
+	// Mov ra, rb ... -> *ra = *rb
+	Mov = byte(iota)
+
+	// Movm ra, rb ... -> M[*ra] = M[*rb]
+	Movm
+
+	// Load ra, rb ... -> *ra = M[*rb]
+	Load
+
+	// Stor ra, rb ... -> M[*ra] = *rb
+	Stor
 
 	Addi  // Add immediate
 	Addiu // Add immediate Unsigned
