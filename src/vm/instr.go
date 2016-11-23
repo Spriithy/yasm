@@ -43,12 +43,12 @@ func decode(src uint32) instr {
 		rd := byte((src & rdMask) >> 21)
 		rs0 := byte((src & rs0Mask) >> 16)
 		rs1 := byte((src & rs1Mask) >> 11)
-		x := DoubleWord(src & rArgMask)
-		return &rInstr{op, rd, rs0, rs1, int32(x.Word(0).Int16())}
+		x := Word(src & rArgMask)
+		return &rInstr{op, rd, rs0, rs1, int32(x.Int16(0))}
 	case op < opcodeMax: // B. Instructions
-		x := DoubleWord(src & bArgMask)
-		b0, b1, b2 := x.Byte(0), x.Byte(1), x.Byte(2)
-		y := int32(*b0) | int32(b1.Word(1).Int16()) | b2.DoubleWord(3).Int32()
+		x := Word(src & bArgMask)
+		b0, b1, b2 := x.Int8(0), x.Int8(1), x.Int8(2)
+		y := int32(b0) | int32(b1)<<8 | int32(b2)<<16
 		return &bInstr{op, y}
 	}
 	return nil

@@ -2,56 +2,57 @@ package vm
 
 const (
 	// Begin I. typed instructions with mov
-	mov = byte(iota) // Move
+	Mov = byte(iota) // Move
 
-	addi  // Add immediate
-	addiu // Add immediate Unsigned
-	negi  // Negate a signed number
-	andi  // And immediate
-	ori   // Or immediate
-	xori  // Not immediate
+	Addi  // Add immediate
+	Addiu // Add immediate Unsigned
+	Negi  // Negate a signed number
+	Andi  // And immediate
+	Ori   // Or immediate
+	Xori  // Not immediate
 
 	// Branching related
-	beq // Branch equal
-	bne // Branch not equal
-	blt // Branch less than
-	bgt // Branch greater than
-	ble // Branch less or equal
-	bge // Branch greater or equal
+	Beq // Branch equal
+	Bne // Branch not equal
+	Blt // Branch less than
+	Bgt // Branch greater than
+	Ble // Branch less or equal
+	Bge // Branch greater or equal
 
 	// Load operations
-	lb  // Load byte
-	lc  // Load char
-	li  // Load int
-	liu // Load int unsigned
-	ll  // Load long
-	llu // Load long unsigned
+	Lb   // Load byte
+	Lw   // Load word
+	Lwu  // Load Word unsigned
+	Ldw  // Load DoubleWord
+	Ldwu // Load DoubleWord unsigned
+	Lqw  // Load QuadWord
+	Lqwu // Load QuadWord unsigned
 
 	// Begin R. typed instructions
-	add  // Add
-	addu // Add unsigned
-	sub  // Subtract
-	subu // Subtract unsigned
-	mul  // Multiply
-	mulu // Multiply unsigned
-	div  // Divide
-	divu // Divide unsigned
-	shl  // Shift Right
-	shr  // Shift Left
+	Add  // Add
+	Addu // Add unsigned
+	Sub  // Subtract
+	Subu // Subtract unsigned
+	Mul  // Multiply
+	Mulu // Multiply unsigned
+	Div  // Divide
+	Divu // Divide unsigned
+	Shl  // Shift Right
+	Shr  // Shift Left
 
-	and // And
-	or  // Or
-	xor // Xor
-	not // Two's complement
+	And // And
+	Or  // Or
+	Xor // Xor
+	Not // Two's complement
 
 	// Begin B. typed instructions
-	b  // Direct Branch
-	br // Branch Register
+	B  // Direct Branch
+	Br // Branch Register
 
 	// Aliases for op type bounds
-	_i = mov
-	_r = add
-	_b = b
+	_i = Mov
+	_r = Add
+	_b = B
 
 	// Last valid opcode
 	opcodeMax = 1<<6 - 1
@@ -60,49 +61,50 @@ const (
 )
 
 var opName = map[byte]string{
-	mov: "mov",
+	Mov: "mov",
 
-	addi:  "addi",
-	addiu: "addiu",
-	negi:  "negi",
-	andi:  "andi",
-	ori:   "ori",
-	xori:  "xori",
+	Addi:  "addi",
+	Addiu: "addiu",
+	Negi:  "negi",
+	Andi:  "andi",
+	Ori:   "ori",
+	Xori:  "xori",
 
 	// Branching related
-	beq: "beq",
-	bne: "bne",
-	blt: "blt",
-	bgt: "bgt",
-	ble: "ble",
-	bge: "bge",
+	Beq: "beq",
+	Bne: "bne",
+	Blt: "blt",
+	Bgt: "bgt",
+	Ble: "ble",
+	Bge: "bge",
 
 	// Load operations
-	lb:  "lb",
-	lc:  "lc",
-	li:  "li",
-	liu: "liu",
-	ll:  "ll",
-	llu: "llu",
+	Lb:   "lb",
+	Lw:   "lw",
+	Lwu:  "lwu",
+	Ldw:  "ldw",
+	Ldwu: "ldwu",
+	Lqw:  "lqw",
+	Lqwu: "lqwu",
 
 	// Begin R. typed instructions
-	add:  "add",
-	addu: "addu",
-	sub:  "sub",
-	subu: "subu",
-	mul:  "mul",
-	mulu: "mulu",
-	div:  "div",
-	divu: "divu",
-	shl:  "shl",
-	shr:  "shr",
+	Add:  "add",
+	Addu: "addu",
+	Sub:  "sub",
+	Subu: "subu",
+	Mul:  "mul",
+	Mulu: "mulu",
+	Div:  "div",
+	Divu: "divu",
+	Shl:  "shl",
+	Shr:  "shr",
 
-	and: "and",
-	or:  "or",
-	xor: "xor",
-	not: "not",
+	And: "and",
+	Or:  "or",
+	Xor: "xor",
+	Not: "not",
 
 	// Begin B. typed instructions
-	b:  "not",
-	br: "br",
+	B:  "not",
+	Br: "br",
 }
