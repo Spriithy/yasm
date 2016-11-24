@@ -1,7 +1,5 @@
 package vm
 
-var ()
-
 // Main is
 func Main() {
 	/*
@@ -21,7 +19,7 @@ func Main() {
 		println(*r0, *r1, eq(r0, r1)) //false
 	*/
 
-	x := gen(0x03, Add, 1, 49, 17, 0xff)
-	print(read(x))
+	x := gen(0x1, jmp, 1, 43, 62, 0xf)
+	println(read(word(x), wordFrom(-32)))
 
 }

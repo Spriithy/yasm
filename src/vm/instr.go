@@ -7,42 +7,55 @@ var hex = func(x uint32) string {
 }
 
 var bin = func(x uint32) string {
-	return fmt.Sprintf("0b%b", x)
+	return fmt.Sprintf("0b%032b", x)
 }
 
-var str = func(x uint32) string {
+var _str = func(x uint32) string {
 	return fmt.Sprintf("%d", x)
 }
 
 const (
-	bcOpcodeMask = 0xfc000000
-	bcAMask      = 0x03f00000
-	bcBMask      = 0x000fc000
-	bcCMask      = 0x00003f00
-	bcXMask      = 0x000000c0
-	bcYMask      = 0x0000003f
+	tMask = 0xc0000000
+	oMask = 0x3f000000
+	aMask = 0x00fc0000
+	bMask = 0x0003f000
+	cMask = 0x00000fc0
+	eMask = 0x0000003f
 )
 
-// oooo ooaa aaaa bbbb bbcc cccc xxyy yyyy
+// -t---op--- --ra-----rb-- ---rc----ex---
+// ttoo oooo aaaa aabb bbbb cccc ccee eeee
 func gen(mode uint32, op byte, arg1, arg2, arg3, arg4 uint32) uint32 {
 	var i uint32
 
-	i |= uint32(op) << 26
-	i |= arg1 << 20
-	i |= arg2 << 14
-	i |= arg3 << 8
-	i |= mode << 6
-	i |= arg4 & bcYMask
+	i |= mode << 30       // mode
+	i |= uint32(op) << 24 // op
+	i |= arg1 << 18       // ra
+	i |= arg2 << 12       // rb
+	i |= arg3 << 6        // rc
+	i |= arg4 & eMask     // extra
 
 	return i
 }
 
-func read(i uint32) string {
-	op := (i & bcOpcodeMask) >> 26
-	ax := (i & bcXMask) >> 6
+func read(n, m word) string {
+	i := n.UInt32(0)
+	tt := (i & tMask) >> 30
+	op := (i & oMask) >> 24
 
 	s := ""
-	switch ax {
+
+	// tt = 0x00 -> ordinary opcode
+	// tt = 0x01 -> double word opcode
+	// tt = 0x02 -> Integer
+	// tt = 0x03 -> Float
+	switch tt {
+	case 0x01:
+		s += " "
+		s += opName[byte(op)]
+		s += "\t"
+		s += fmt.Sprintf("%d", m.Int32(0))
+		return s
 	case 0x2:
 		s += "i"
 	case 0x3:
@@ -54,15 +67,15 @@ func read(i uint32) string {
 	s += opName[byte(op)]
 	s += "\t"
 
-	ra := (i & bcAMask) >> 20
-	rb := (i & bcBMask) >> 14
-	rc := (i & bcCMask) >> 8
-	ay := (i & bcYMask)
+	ra := (i & aMask) >> 20
+	rb := (i & bMask) >> 14
+	rc := (i & cMask) >> 8
+	ex := (i & eMask)
 
 	s += regName(ra) + ", "
 	s += regName(rb) + ", "
 	s += regName(rc) + "    "
-	s += hex(ay)
+	s += hex(ex)
 
 	return s
 }
