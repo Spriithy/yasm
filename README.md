@@ -1,78 +1,139 @@
-# Polaroid
+# SMALL - The **SM**all **A**ssembly-**L**ike **L**anguage
 
-The Polaroid Virtual Machine, written in Go
+This is the *SMALL* language implementation repository for both 32 and 64 bits architectures.
 
-## Virtual Machine registers
-
-| Registers | Description | Stored in AR |
-|----------:|:---|:---:|
-| `pc`      |  Program Counter | no |
-| `esp`     |  Stack Pointer | no |
-| `tp`      |  This pointer | no |
-| `tr`      | Temporary Register | no |
-| `eax` `ebx` `ecx` `edx` | General purpose registers | no |
-| `lpc` | Last Program Counter | yes |
-| `ltp` |  Last This Pointer | yes |
-| `r0 ... r31` | Local variable registers | yes |
-
-This means that the machine itself provides the `pc`, `esp`, `tp` and `me` registers
-but `eax`, `ebx`, `ecx`, `edx`, `ltp` are referenced in each Activation Record.
-That is, each time an AR is generated, `pc` is transfered in the new `tpc` and same
-goes for `tp` being copied in `ltp`. `r1` and all successive registers are allocated to
-the parameters passed to the function. `r0` holds the number of arguments that were passed.
-The `tr` register is used by the `swap` and branch tests instructions as a **T**emporary **R**egister.
-
-## Assembler instructions
-
-Each assembler instruction has from 0 to 3 operands that can either be registers, constants
-or memory references (pointers). Each operand is label using this convention :
-
-* `A` is the first operand
-* `B` is the second operand
-* `C` is the third operand
-
-For a whole instruction must hold in 32 bits, each operand must be 8 bits long. An operand binary representation is as follows :
+## Registers
 
 ```
-bits   0      2                  8
-       | type |       value      |
+r0 ... r7   -> general purpose registers
+pc          -> program counter
+sp          -> stack pointer (local variables)
+ic          -> interruption code (sys calls)
+rx          -> the register  
 ```
 
-Where type is :
+# Opcodes
 
-* `00` if the operand refers to a register
-* `01` if the operand refers to a constant (up to 2^6 - 1) in the pool
-* `10` if the operand refers to a the memory address stored in the given register
-
-Let's analyze the `add eax, 21, [r2]` instruction that is just `eax = k[21] + *r2;`, where `k` is the constant pool.
-Assuming the `add` opcode is right, it is compiled down to:
+The instructions are stored on a 32 bits format, with 
 
 ```
-   OPCODE  A          B         C 
-
-      add  eax        21        [r2]
-0010 1100  0000 0100  0101 0101 1000 1101
-           ^^         ^^        ^^
-            |          |         |
-            |          |        10 : refers to what is stored at the address stored in r2
-            |         01 : refers to a constant (the 21st)
-           00 : refers to a register
+      0x0 if using on nothing or integers
+      0x1 if using floats
+      |     
+      |  op    ra   rb       extra bits ------> (signed if integer)
+      v______ ____ ____ ___________________ 
+    XXTO OOOO AAAA BBBB EEEE EEEE EEEE EEEE
+    ^^        
+    |         
+    0x0 usual opcode
+    0x1 immediate 16 (stored in this word)
+    0x2 immediate 32 (one next word)
+    0x3 immediate 64 (two next words)
 ```
 
-## Assembler specifications
+There is the complete opcodes specification
 
-* `R` is the symbol for _any register_
-* `K` is the symbol for _constant index_
-* `A` is the symbol for _address_
+```go
+// general purpose opcodes
 
+swi    0x00    (ra | imm)       interrupts the execution to perform the expected software interrupt           
+mov    0x01    ra, (rb | imm)   moves the content from rb or the immediate value into register ra
+mom    0x02    ra, rb           moves in memory content from the address stored in rb to the address stored in ra     
+loa    0x03    ra, rb           load the value stored at the memory address of rb into ra
+str    0x04    ra, (rb | imm)   stores the content of register rb or immediate value into ra
 
-* `[.]` means that there might be no prefix
-* `c` stands for `Char`
-* `i` stands for `Int`
-* `f` stands for `Float` 
+// arithmetic operations, each one updates the rx register to the operation result
 
-| Instruction  name | Operands | A | B | C | Description |
-|------------------:|:---:|:-----:|:-----:|:-----:|:---|
-| `hlt`             |   0 | -     | -     | -     | Halts the execution |
+add    0x05    ra, (rb | imm)   adds the second operand to the first register
+sub    0x06    ra, (rb | imm)   subtract the second operand from the first register
+mul    0x07    ra, (rb | imm)   multiplies the second operand with the first register
+div    0x08    ra, (rb | imm)   divide the first register by the second operand
+rem    0x09    ra, (rb | imm)   adds the second operand to the first register
+bsl    0x0a    ra, (rb | imm)   bit shift left the first register by the second operand 
+bsr    0x0b    ra, (rb | imm)   bit shift right the first register by the second operand
 
-### Whole stuff has changed
+inc    0x0c    ra, (rb | imm)   increments the value stored in ra by the second operand signed value
+dec    0x0d    ra, (rb | imm)   decrements the value stored in ra by the second operand signed value
+
+and    0x0e    ra, (rb | imm)   bitwise and on first register and second operand 
+ior    0x0f    ra, (rb | imm)   bitwise ior on first register and second operand
+xor    0x10    ra, (rb | imm)   bitwise xor on first register and second operand
+not    0x11    ra               bitwise not on register ra
+
+// all conditional jump statements update the value of rx to the comparison result (except for jmp)
+// rx = 1 if condition is met, rx = 0 otherwise 
+
+jmp    0x12    imm              performs a relative jump, ie. PC += imm
+jz     0x13    imm              relative jump if rx == 0
+jnz    0x14    imm              relative jump if rx != 0
+jeq    0x15    (ra | imm), imm  relative jump if ra == rx (or imm, likewise)
+jne    0x16    (ra | imm), imm  relative jump if ra != rx    
+jlt    0x17    (ra | imm), imm  relative jump if ra <  rx    
+jle    0x18    (ra | imm), imm  relative jump if ra <= rx    
+jgt    0x19    (ra | imm), imm  relative jump if ra >  rx    
+jge    0x1a    (ra | imm), imm  relative jump if ra >= rx    
+
+srl    0x1b    ra, rb           subroutine link
+ret    0x1c    ra, rb           return from subroutine
+```
+
+## Legacy opcodes
+
+```
+eq     0x12    ra, (rb | imm)   compares ra and the second operand, sets rx to 1 unless they are different
+neq    0x13    ra, (rb | imm)   sets rx to 0 unless they are different
+lt     0x14    ra, (rb | imm)   sets rx to 1 unless ra >= (rb | imm)
+leq    0x15    ra, (rb | imm)   sets rx to 1 unless ra >  (rb | imm)
+gt     0x16    ra, (rb | imm)   sets rx to 1 unless ra <= (rb | imm)
+geq    0x17    ra, (rb | imm)   sets rx to 1 unless ra <  (rb | imm)
+```
+
+I have effectively removed them from the Insctruction Set since they can easily been translated only using conditional jumps and mov
+operations. Indeed, say we have the following higher-level code:
+
+```go
+if r0 == 0 {
+    r1 = r1 + 1  
+} else {
+    r1 = r1 - 1
+}
+```
+
+It would be translated to the following *SMALL* code:
+
+```asm
+eq    r0, 0
+jnz      +2
+inc   r1, 1
+jmp      +1
+dec   r1, 1
+```
+
+However, the use of `eq` could be replaced with a simple trick. This is used to reduce even more
+the instruction set. I can afford up to 32 (from `0x00` to `0x1f`) opcodes so the opcode part in 
+the binary format doesn't overflow 5 bits.
+
+The previous piece of code is therefore invalid. Here is a rewrite:
+
+```asm
+mov   rx,  0
+jne   r0, +2
+inc   r1,  1 
+jmp       +1
+dec   r1,  1
+```
+
+Sameways, `a = (a == b)` could be:
+
+```asm
+eq    r0, r1    ; assume r0 = a, r1, = b
+mov   r0, rx
+```
+
+but is instead written as:
+
+```asm
+mov   rx, r1    ; assume r0 = a, r1, = b
+jeq   r0, +0    ; +0 tricks the interpreter to just not update the program counter
+mov   r0, rx
+```
