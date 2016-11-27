@@ -1,20 +1,12 @@
 ```
-import "math"
+.import stdio
 
-Complex : {
-    float re, im
+.data
+    s : "Hello, World! "
 
-    new (float r, i) {
-        re = r
-        i = i
-    }
-
-    float magnitude() {
-        return math.sqrt(re * re + im * im) 
-    }
-
-    float[] toArray() {
-        return float[re, im]
-    }
-}
+%start
+    .const 3
+    .const 5
+    add     a0,     r0,     r1
+    call    printf, s,      a0
 ```
