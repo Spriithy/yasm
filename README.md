@@ -9,7 +9,7 @@ r0 ... r7   -> general purpose registers
 pc          -> program counter
 sp          -> stack pointer (local variables)
 ic          -> interruption code (sys calls)
-rx          -> the register  
+rx          -> the register used for tests and calculations
 ```
 
 # Opcodes
