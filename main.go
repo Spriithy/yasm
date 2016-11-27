@@ -11,6 +11,10 @@ func add(f *os.File, i uint32) {
 }
 
 func main() {
-	i := small.CompileInstruction(0x0, 0x0, small.MOV, 11, 7, 3)
+	i := []small.Instruction{
+		small.CompileInstruction(0x0, 0x0, small.MOV, 11, 7, 3),
+		small.CompileInstruction(0x1, 0x0, small.ADD, 3, 1, 24),
+	}
+
 	small.Disasemble(i)
 }

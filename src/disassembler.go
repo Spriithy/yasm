@@ -82,11 +82,11 @@ func err(a ...interface{}) {
 
 // Disasemble is used to pretty-print (or dissassemble) a binary
 // file compiled for the SMALL virtual-machine.
-func Disasemble(x Instruction) {
+func Disasemble(x []Instruction) {
 	var ii Instruction
 	extra := false
 
-	code := []Instruction{x}
+	code := x
 	for i := 0; i < len(code); i++ {
 		ii = code[i]
 		switch ii.O() {
