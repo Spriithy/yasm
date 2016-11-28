@@ -33,59 +33,59 @@ The instructions are stored on a 32 bits format, with
 
 There is the complete opcodes specification
 
-```go
-// general purpose opcodes
+```asm
+; general purpose opcodes
 
-swi    0x00    (ra | imm)       interrupts the execution to perform the expected software interrupt           
-mov    0x01    ra, (rb | imm)   moves the content from rb or the immediate value into register ra
-mom    0x02    ra, rb           moves in memory content from the address stored in rb to the address stored in ra     
-loa    0x03    ra, rb           load the value stored at the memory address of rb into ra
-str    0x04    ra, (rb | imm)   stores the content of register rb or immediate value into ra
+swi    0x00    (ra | imm)       ; interrupts the execution to perform the expected software interrupt           
+mov    0x01    ra, (rb | imm)   ; moves the content from rb or the immediate value into register ra
+mom    0x02    ra, rb           ; moves in memory content from the address stored in rb to the address stored in ra     
+loa    0x03    ra, rb           ; load the value stored at the memory address of rb into ra
+str    0x04    ra, (rb | imm)   ; stores the content of register rb or immediate value into ra
 
-// arithmetic operations, each one updates the rx register to the operation result
+; arithmetic operations, each one updates the rx register to the operation result
 
-add    0x05    ra, (rb | imm)   adds the second operand to the first register
-sub    0x06    ra, (rb | imm)   subtract the second operand from the first register
-mul    0x07    ra, (rb | imm)   multiplies the second operand with the first register
-div    0x08    ra, (rb | imm)   divide the first register by the second operand
-rem    0x09    ra, (rb | imm)   adds the second operand to the first register
-bsl    0x0a    ra, (rb | imm)   bit shift left the first register by the second operand 
-bsr    0x0b    ra, (rb | imm)   bit shift right the first register by the second operand
+add    0x05    ra, (rb | imm)   ; adds the second operand to the first register
+sub    0x06    ra, (rb | imm)   ; subtract the second operand from the first register
+mul    0x07    ra, (rb | imm)   ; multiplies the second operand with the first register
+div    0x08    ra, (rb | imm)   ; divide the first register by the second operand
+rem    0x09    ra, (rb | imm)   ; adds the second operand to the first register
+bsl    0x0a    ra, (rb | imm)   ; bit shift left the first register by the second operand 
+bsr    0x0b    ra, (rb | imm)   ; bit shift right the first register by the second operand
 
-inc    0x0c    ra, (rb | imm)   increments the value stored in ra by the second operand signed value
-dec    0x0d    ra, (rb | imm)   decrements the value stored in ra by the second operand signed value
+inc    0x0c    ra, (rb | imm)   ; increments the value stored in ra by the second operand signed value
+dec    0x0d    ra, (rb | imm)   ; decrements the value stored in ra by the second operand signed value
 
-and    0x0e    ra, (rb | imm)   bitwise and on first register and second operand 
-ior    0x0f    ra, (rb | imm)   bitwise ior on first register and second operand
-xor    0x10    ra, (rb | imm)   bitwise xor on first register and second operand
-not    0x11    ra               bitwise not on register ra
+and    0x0e    ra, (rb | imm)   ; bitwise and on first register and second operand 
+ior    0x0f    ra, (rb | imm)   ; bitwise ior on first register and second operand
+xor    0x10    ra, (rb | imm)   ; bitwise xor on first register and second operand
+not    0x11    ra               ; bitwise not on register ra
 
-// all conditional jump statements update the value of rx to the comparison result (except for jmp)
-// rx = 1 if condition is met, rx = 0 otherwise 
+; all conditional jump statements update the value of rx to the comparison result (except for jmp)
+; rx = 1 if condition is met, rx = 0 otherwise 
 
-jmp    0x12    imm              performs a relative jump, ie. PC += imm
-jz     0x13    imm              relative jump if rx == 0
-jnz    0x14    imm              relative jump if rx != 0
-jeq    0x15    (ra | imm), imm  relative jump if ra == rx (or imm, likewise)
-jne    0x16    (ra | imm), imm  relative jump if ra != rx    
-jlt    0x17    (ra | imm), imm  relative jump if ra <  rx    
-jle    0x18    (ra | imm), imm  relative jump if ra <= rx    
-jgt    0x19    (ra | imm), imm  relative jump if ra >  rx    
-jge    0x1a    (ra | imm), imm  relative jump if ra >= rx    
+jmp    0x12    imm              ; performs a relative jump, ie. PC += imm
+jz     0x13    imm              ; relative jump if rx == 0
+jnz    0x14    imm              ; relative jump if rx != 0
+jeq    0x15    (ra | imm), imm  ; relative jump if ra == rx (or imm, likewise)
+jne    0x16    (ra | imm), imm  ; relative jump if ra != rx    
+jlt    0x17    (ra | imm), imm  ; relative jump if ra <  rx    
+jle    0x18    (ra | imm), imm  ; relative jump if ra <= rx    
+jgt    0x19    (ra | imm), imm  ; relative jump if ra >  rx    
+jge    0x1a    (ra | imm), imm  ; relative jump if ra >= rx    
 
-srl    0x1b    ra, rb           subroutine link
-ret    0x1c    ra, rb           return from subroutine
+srl    0x1b    ra, rb           ; subroutine link
+ret    0x1c    ra, rb           ; return from subroutine
 ```
 
 ## Legacy opcodes
 
-```
-eq     0x12    ra, (rb | imm)   compares ra and the second operand, sets rx to 1 unless they are different
-neq    0x13    ra, (rb | imm)   sets rx to 0 unless they are different
-lt     0x14    ra, (rb | imm)   sets rx to 1 unless ra >= (rb | imm)
-leq    0x15    ra, (rb | imm)   sets rx to 1 unless ra >  (rb | imm)
-gt     0x16    ra, (rb | imm)   sets rx to 1 unless ra <= (rb | imm)
-geq    0x17    ra, (rb | imm)   sets rx to 1 unless ra <  (rb | imm)
+```asm
+eq     0x12    ra, (rb | imm)   ; compares ra and the second operand, sets rx to 1 unless they are different
+neq    0x13    ra, (rb | imm)   ; sets rx to 0 unless they are different
+lt     0x14    ra, (rb | imm)   ; sets rx to 1 unless ra >= (rb | imm)
+leq    0x15    ra, (rb | imm)   ; sets rx to 1 unless ra >  (rb | imm)
+gt     0x16    ra, (rb | imm)   ; sets rx to 1 unless ra <= (rb | imm)
+geq    0x17    ra, (rb | imm)   ; sets rx to 1 unless ra <  (rb | imm)
 ```
 
 I have effectively removed them from the Insctruction Set since they can easily been translated only using conditional jumps and mov
