@@ -85,8 +85,8 @@ func (i Instruction) RB() int {
 
 // E returns the extra 16-bits segment stored in the instruction
 // This is mostly used as an immediate value
-func (i Instruction) E() int16 {
-	return int16(i >> 16)
+func (i Instruction) E() int32 {
+	return int32(i >> 16)
 }
 
 // Int16 returns the int16 representation of the instruction's bits

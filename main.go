@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/Spriithy/SMALL/src"
+	"github.com/Spriithy/small/src/vm"
 )
 
 func add(f *os.File, i uint32) {

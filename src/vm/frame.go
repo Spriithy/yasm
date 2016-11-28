@@ -1,7 +1,7 @@
 package small
 
-type record struct {
+type frame struct {
 	r      []word
 	locals []word
-	caller *record
+	caller *frame
 }
