@@ -82,11 +82,10 @@ func err(a ...interface{}) {
 
 // Disasemble is used to pretty-print (or dissassemble) a binary
 // file compiled for the SMALL virtual-machine.
-func Disasemble(x []Instruction) {
+func Disasemble(code []Instruction) {
 	var ii Instruction
 	extra := false
 
-	code := x
 	for i := 0; i < len(code); i++ {
 		ii = code[i]
 		switch ii.O() {
@@ -141,7 +140,7 @@ func Disasemble(x []Instruction) {
 		case JMP, JZ, JNZ:
 			println(opName(ii.O())+"\t", ii.E())
 		case JEQ, JNE, JLT, JLE, JGT, JGE:
-			print(opName(ii.O()), "\t")
+			print(opName(ii.O()) + "\t")
 			switch ii.X() {
 			case 0x0:
 				println(",", regName(ii.RA()))

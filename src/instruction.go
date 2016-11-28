@@ -38,7 +38,7 @@ func ReadInstruction(b0, b1, b2, b3 byte) Instruction {
 }
 
 // CompileInstruction is used to create an instruction from its description
-func CompileInstruction(x, t, o, a, b uint32, e int) Instruction {
+func CompileInstruction(x, t, o, a, b uint32, e int16) Instruction {
 	var i uint32
 	i |= (x << 0) & xMask
 	i |= (t << 2) & tMask
@@ -86,13 +86,13 @@ func (i Instruction) RB() int {
 // E returns the extra 16-bits segment stored in the instruction
 // This is mostly used as an immediate value
 func (i Instruction) E() int16 {
-	return int16(i & eMask >> 16)
+	return int16(i >> 16)
 }
 
 // Int16 returns the int16 representation of the instruction's bits
 // or rather, it's immediate value
 func (i Instruction) Int16() int16 {
-	return int16(i & eMask)
+	return int16(i >> 16)
 }
 
 // Int32 returns the int32 representation of the instruction's bits
