@@ -85,8 +85,8 @@ func (i Instruction) RB() int {
 
 // E returns the extra 16-bits segment stored in the instruction
 // This is mostly used as an immediate value
-func (i Instruction) E() int32 {
-	return int32(i >> 16)
+func (i Instruction) E() int16 {
+	return int16(i >> 16)
 }
 
 // Int16 returns the int16 representation of the instruction's bits
@@ -118,8 +118,8 @@ func (i Instruction) Int64(i2 *Instruction) int64 {
 	return int64(i)<<32 | i2.Int64(nil)
 }
 
-// Float64 returns the float32 representation of the instruction's bits
+// Float64 returns the float64 representation of the instruction's bits
 // or rather, it's immediate value
-func (i Instruction) Float64(i2 Instruction) float32 {
-	return *(*float32)(unsafe.Pointer(&i))
+func (i Instruction) Float64(i2 Instruction) float64 {
+	return *(*float64)(unsafe.Pointer(&i))
 }

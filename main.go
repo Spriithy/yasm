@@ -14,8 +14,7 @@ func main() {
 	i := []small.Instruction{
 		small.CompileInstruction(0x0, 0x0, small.MOV, 11, 7, 0x0),
 		small.CompileInstruction(0x1, 0x0, small.ADD, 3, 1, -0xf),
-		small.CompileInstruction(0x1, 0x0, small.JMP, 3, 1, -0x0a0b),
+		small.CompileInstruction(0x1, 0x0, small.JMP, 3, 1, -2),
 	}
-
 	small.Disasemble(i)
 }

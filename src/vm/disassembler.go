@@ -104,7 +104,6 @@ func Disasemble(code []Instruction) {
 			switch ii.X() {
 			case 0x0:
 				println(",", regName(ii.RB()))
-				println("-->", ii.RB())
 			case 0x1:
 				println(",", getHex(ii.Int16()))
 			case 0x02:
