@@ -1,4 +1,4 @@
-package small
+package yasm
 
 type Opcode = u8
 

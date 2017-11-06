@@ -1,4 +1,4 @@
-package small
+package yasm
 
 import "fmt"
 

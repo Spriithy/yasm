@@ -1,4 +1,4 @@
-package small
+package yasm
 
 var stackAlign = sizeOf[U32]
 

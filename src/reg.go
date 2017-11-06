@@ -1,4 +1,4 @@
-package small
+package yasm
 
 const (
 	rax = iota
