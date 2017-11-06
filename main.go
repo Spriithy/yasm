@@ -1,7 +1,7 @@
 package main
 
-import "github.com/Spriithy/babel/src"
+import yasm "github.com/Spriithy/yasm/src"
 
 func main() {
-	small.Main()
+	yasm.Main()
 }
