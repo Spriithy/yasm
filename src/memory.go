@@ -25,3 +25,19 @@ func seti64(p uintptr, v i64)     { *(*i64)(unsafe.Pointer(p)) = v }
 func setf32(p uintptr, v f32)     { *(*f32)(unsafe.Pointer(p)) = v }
 func setf64(p uintptr, v f64)     { *(*f64)(unsafe.Pointer(p)) = v }
 func setPtr(p uintptr, v uintptr) { *(*uintptr)(unsafe.Pointer(p)) = v }
+
+func (c *cpu) getLocal8(offset int) u8        { return getu8(c.fp + uintptr(offset)) }
+func (c *cpu) getLocal16(offset int) u16      { return getu16(c.fp + uintptr(offset)) }
+func (c *cpu) getLocal32(offset int) u32      { return getu32(c.fp + uintptr(offset)) }
+func (c *cpu) getLocal64(offset int) u64      { return getu64(c.fp + uintptr(offset)) }
+func (c *cpu) getLocalf32(offset int) f32     { return getf32(c.fp + uintptr(offset)) }
+func (c *cpu) getLocalf64(offset int) f64     { return getf64(c.fp + uintptr(offset)) }
+func (c *cpu) getLocalPtr(offset int) uintptr { return getPtr(c.fp + uintptr(offset)) }
+
+func (c *cpu) setLocal8(offset int, v u8)        { setu8(c.fp+uintptr(offset), v) }
+func (c *cpu) setLocal16(offset int, v u16)      { setu16(c.fp+uintptr(offset), v) }
+func (c *cpu) setLocal32(offset int, v u32)      { setu32(c.fp+uintptr(offset), v) }
+func (c *cpu) setLocal64(offset int, v u64)      { setu64(c.fp+uintptr(offset), v) }
+func (c *cpu) setLocalf32(offset int, v f32)     { setf32(c.fp+uintptr(offset), v) }
+func (c *cpu) setLocalf64(offset int, v f64)     { setf64(c.fp+uintptr(offset), v) }
+func (c *cpu) setLocalPtr(offset int, v uintptr) { setPtr(c.fp+uintptr(offset), v) }
