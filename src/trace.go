@@ -2,14 +2,19 @@ package yasm
 
 import "fmt"
 
+var StackTraceMaxDepth = 16
+
 func (c *cpu) trace() {
-	if c.fp == c.bp {
-		// frame is first _start
-		fmt.Printf("in _start:    sp=0x%x fp=0x%x\n", c.sp, c.fp)
-		return
+	var depth int
+	for fn := c.fn; fn.Caller != nil && depth < StackTraceMaxDepth; fn = fn.Caller {
+		if depth == 0 {
+			fmt.Printf("Stack trace: ")
+		}
+		fmt.Printf("in call to %s ~ \tPc=0x%x, Sp=0x%x, Fp=0x%x\n", fn.Name, fn.pc, c.sp, c.fp)
+		depth++
 	}
 
-	fmt.Printf("in %s:    sp=0x%x fp=0x%x\n", "<...>", c.sp, c.fp)
-	c.fp = getAddr(c.fp + sizeOf[Addr])
-	c.trace()
+	if depth >= StackTraceMaxDepth {
+		fmt.Printf("...\n")
+	}
 }

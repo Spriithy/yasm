@@ -37,6 +37,11 @@ const (
 	swap
 	dup
 
+	call
+	ret
+	fcall
+	lret
+
 	not
 	and
 	or
