@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	StackAlign = unsafe.Sizeof(__u32__)
-	StackSize  = 1 << 16
+	StackAlign   = unsafe.Sizeof(__u32__)
+	StackSize    = 1 << 16
+	StackMinDump = 128
 )
 
 func (c *cpu) frameSize() int { return int(c.fp - c.sp) }
@@ -97,34 +98,43 @@ func isDumpAt(p uintptr, pos uintptr) bool {
 	return p-1 >= pos-StackAlign && p-1 < pos
 }
 
-func (c *cpu) stackDump() {
-	for i := len(c.stack); i > StackSize-128; i -= int(StackAlign) {
+func (c *cpu) stackDump(depth int) {
+	if depth < StackMinDump {
+		depth = StackMinDump
+	}
+
+	if depth > c.stackSize() {
+		depth = c.stackSize() + 2*int(StackAlign)
+	}
+
+	lim := c.sp + uintptr(depth)
+	for p := c.sp + StackAlign; p < lim; p += StackAlign {
 		// dump pointer
-		dp := uintptr(unsafe.Pointer(&c.stack[i-1]))
-		if isDumpAt(c.sp, dp) && i%int(StackAlign) == 0 {
-			if i != len(c.stack) {
+		dp := p - 1 //uintptr(unsafe.Pointer(&c.stack[p-1]))
+		if isDumpAt(c.sp, dp) && p%StackAlign == 0 {
+			if p != lim {
 				fmt.Println()
 			}
 			fmt.Printf("\x1b[44;1m0x%08x SP \x1b[0m\x1b[34m\uE0B0\x1b[0m ", dp-StackAlign+1)
-		} else if isDumpAt(c.bp, dp) && i%int(StackAlign) == 0 {
-			if i != len(c.stack) {
+		} else if isDumpAt(c.bp, dp) && p%StackAlign == 0 {
+			if p != lim {
 				fmt.Println()
 			}
 			fmt.Printf("\x1b[41;1m0x%08x BP \x1b[0m\x1b[31m\uE0B0\x1b[0m ", dp-StackAlign+1)
-		} else if isDumpAt(c.fp, dp) && i%int(StackAlign) == 0 {
-			if i != len(c.stack) {
+		} else if isDumpAt(c.fp, dp) && p%StackAlign == 0 {
+			if p != lim {
 				fmt.Println()
 			}
 			fmt.Printf("\x1b[42;1m0x%08x FP \x1b[0m\x1b[32m\uE0B0\x1b[0m ", dp-StackAlign+1)
-		} else if i%int(StackAlign) == 0 {
-			if i != len(c.stack) {
+		} else if p%StackAlign == 0 {
+			if p != lim {
 				fmt.Println()
 			}
 			fmt.Printf("0x%08x      ", dp-StackAlign+1)
 		}
 
 		for j := 0; j < int(StackAlign); j++ {
-			fmt.Printf("0x%02x ", c.stack[i-1-j])
+			fmt.Printf("0x%02x ", getu8(p-uintptr(1+j)))
 		}
 
 		fmt.Print("\x1b[0m")

@@ -25,5 +25,9 @@ func Main() {
 		"version",
 	})
 
-	c.stackDump()
+	c.fp = c.sp
+
+	c.pushi64(-1)
+	c.pushf64(0.256)
+	c.stackDump(0)
 }
