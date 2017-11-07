@@ -1,6 +1,2 @@
-
-SMALL
-
-src/src
-
-*.xml
+yasm
+.idea/
