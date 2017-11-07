@@ -28,9 +28,20 @@ func Main() {
 
 	c.fp = c.sp
 
-	c.pushi64(-1)
-	c.pushf64(0.256)
+	c.pushLocalPtr(4)
+	c.pushLocalPtr(12)
+
 	c.stackDump(0)
 
-	fmt.Printf("%s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(12))))
+	fmt.Printf("argv[0] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(4))))
+	fmt.Printf("argv[1] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(12))))
+
+	c.popLocalPtr(4)
+	c.popLocalPtr(12)
+	fmt.Print("swap...")
+
+	c.stackDump(0)
+
+	fmt.Printf("argv[0] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(4))))
+	fmt.Printf("argv[1] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(12))))
 }

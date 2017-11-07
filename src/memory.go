@@ -41,3 +41,19 @@ func (c *cpu) setLocal64(offset int, v u64)      { setu64(c.fp+uintptr(offset), 
 func (c *cpu) setLocalf32(offset int, v f32)     { setf32(c.fp+uintptr(offset), v) }
 func (c *cpu) setLocalf64(offset int, v f64)     { setf64(c.fp+uintptr(offset), v) }
 func (c *cpu) setLocalPtr(offset int, v uintptr) { setPtr(c.fp+uintptr(offset), v) }
+
+func (c *cpu) pushLocal8(offset int)   { c.pushu8(getu8(c.fp + uintptr(offset))) }
+func (c *cpu) pushLocal16(offset int)  { c.pushu16(getu16(c.fp + uintptr(offset))) }
+func (c *cpu) pushLocal32(offset int)  { c.pushu32(getu32(c.fp + uintptr(offset))) }
+func (c *cpu) pushLocal64(offset int)  { c.pushu64(getu64(c.fp + uintptr(offset))) }
+func (c *cpu) pushLocalf32(offset int) { c.pushf32(getf32(c.fp + uintptr(offset))) }
+func (c *cpu) pushLocalf64(offset int) { c.pushf64(getf64(c.fp + uintptr(offset))) }
+func (c *cpu) pushLocalPtr(offset int) { c.pushPtr(getPtr(c.fp + uintptr(offset))) }
+
+func (c *cpu) popLocal8(offset int)   { setu8(c.fp+uintptr(offset), c.pop8()) }
+func (c *cpu) popLocal16(offset int)  { setu16(c.fp+uintptr(offset), c.pop16()) }
+func (c *cpu) popLocal32(offset int)  { setu32(c.fp+uintptr(offset), c.pop32()) }
+func (c *cpu) popLocal64(offset int)  { setu64(c.fp+uintptr(offset), c.pop64()) }
+func (c *cpu) popLocalf32(offset int) { setf32(c.fp+uintptr(offset), c.popf32()) }
+func (c *cpu) popLocalf64(offset int) { setf64(c.fp+uintptr(offset), c.popf64()) }
+func (c *cpu) popLocalPtr(offset int) { setPtr(c.fp+uintptr(offset), c.popPtr()) }
