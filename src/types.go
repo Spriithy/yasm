@@ -18,8 +18,6 @@ type (
 	f32 = float32
 	f64 = float64
 
-	addr = uintptr
-
 	Type = int
 )
 
@@ -34,7 +32,7 @@ const (
 	I64
 	F32
 	F64
-	Addr
+	Ptr
 )
 
 var (
@@ -44,19 +42,19 @@ var (
 	__u64__ u64
 	__f32__ f32
 	__f64__ f64
-	__ptr__ addr
+	__ptr__ uintptr
 
 	sizeOf = map[Type]uintptr{
-		U8:   unsafe.Sizeof(__u8__),
-		I8:   unsafe.Sizeof(__u8__),
-		U16:  unsafe.Sizeof(__u16__),
-		I16:  unsafe.Sizeof(__u16__),
-		U32:  unsafe.Sizeof(__u32__),
-		I32:  unsafe.Sizeof(__u32__),
-		U64:  unsafe.Sizeof(__u64__),
-		I64:  unsafe.Sizeof(__u64__),
-		F32:  unsafe.Sizeof(__f32__),
-		F64:  unsafe.Sizeof(__f64__),
-		Addr: unsafe.Sizeof(__ptr__),
+		U8:  unsafe.Sizeof(__u8__),
+		I8:  unsafe.Sizeof(__u8__),
+		U16: unsafe.Sizeof(__u16__),
+		I16: unsafe.Sizeof(__u16__),
+		U32: unsafe.Sizeof(__u32__),
+		I32: unsafe.Sizeof(__u32__),
+		U64: unsafe.Sizeof(__u64__),
+		I64: unsafe.Sizeof(__u64__),
+		F32: unsafe.Sizeof(__f32__),
+		F64: unsafe.Sizeof(__f64__),
+		Ptr: unsafe.Sizeof(__ptr__),
 	}
 )

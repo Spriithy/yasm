@@ -2,7 +2,7 @@ package yasm
 
 type Function struct {
 	Name   string
+	Module *Module
 	Caller *Function
-	start  addr
-	pc     int
+	pc     uintptr
 }

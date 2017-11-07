@@ -3,67 +3,60 @@ package yasm
 type Opcode = u8
 
 const (
-	nop = iota
-	unreachable
-	syscall
+	Nop = iota
+	Unreachable
+	Syscall
 
-	const8
-	const16
-	const32
-	const64
+	Const8
+	Const16
+	Const32
+	Const64
 
-	load8
-	load8u
-	store8
+	Load8
+	Load8u
+	Store8
 
-	load16
-	load16u
-	store16
+	Load16
+	Load16u
+	Store16
 
-	load32
-	load32u
-	store32
+	Load32
+	Load32u
+	Store32
 
-	load64
-	store64
+	Load64
+	Store64
 
-	glocal
-	slocal
+	Drop
+	Swap
+	Dup
 
-	gglobal
-	sglobal
+	Call
+	Ret
+	Fcall
 
-	drop
-	swap
-	dup
+	Not
+	And
+	Or
+	Xor
+	Shl
+	Shr
 
-	call
-	ret
-	fcall
-	lret
+	Incr
+	Decr
 
-	not
-	and
-	or
-	xor
-	shl
-	shr
+	Add
+	Sub
+	Mul
+	Div
 
-	incr
-	decr
+	Addu
+	Subu
+	Mulu
+	Divu
 
-	add
-	sub
-	mul
-	div
-
-	addu
-	subu
-	mulu
-	divu
-
-	addf
-	subf
-	mulf
-	divf
+	Addf
+	Subf
+	Mulf
+	Divf
 )
