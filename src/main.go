@@ -1,6 +1,7 @@
 package yasm
 
 import (
+	"fmt"
 	"unsafe"
 )
 
@@ -22,7 +23,7 @@ func Main() {
 
 	c.exec([]string{
 		"test.yasm",
-		"version",
+		"--version",
 	})
 
 	c.fp = c.sp
@@ -30,4 +31,6 @@ func Main() {
 	c.pushi64(-1)
 	c.pushf64(0.256)
 	c.stackDump(0)
+
+	fmt.Printf("%s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(12))))
 }

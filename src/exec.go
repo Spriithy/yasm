@@ -24,11 +24,11 @@ func (c *cpu) exec(argv []string) int {
 	}
 
 	// Push argc and pointers to each argv
-	c.pushi32(i32(len(argv)))
 	for narg := range argv {
-		c.pushPtr(uintptr(unsafe.Pointer(&argv[narg])))
-		fmt.Printf("argv[%d] : %s\n", narg, *(*string)(unsafe.Pointer(c.peekPtr())))
+		c.pushPtr(uintptr(unsafe.Pointer(&argv[len(argv)-narg-1])))
+		fmt.Printf("argv[%d] : %s\n", len(argv)-narg-1, *(*string)(unsafe.Pointer(c.peekPtr())))
 	}
+	c.pushi32(i32(len(argv)))
 
 	return ExitSuccess
 }
