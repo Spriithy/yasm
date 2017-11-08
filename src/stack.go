@@ -28,64 +28,92 @@ func (c *cpu) trapUnderflow(offset uintptr) {
 	}
 }
 
-func (c *cpu) peek8() u8        { return getu8(c.sp) }
-func (c *cpu) peek16() u16      { return getu16(c.sp) }
-func (c *cpu) peek32() u32      { return getu32(c.sp) }
-func (c *cpu) peek64() u64      { return getu64(c.sp) }
-func (c *cpu) peekf32() f32     { return getf32(c.sp) }
-func (c *cpu) peekf64() f64     { return getf64(c.sp) }
+func (c *cpu) peek8() i8        { return get8(c.sp) }
+func (c *cpu) peek8u() u8       { return get8u(c.sp) }
+func (c *cpu) peek16() i16      { return get16(c.sp) }
+func (c *cpu) peek16u() u16     { return get16u(c.sp) }
+func (c *cpu) peek32() i32      { return get32(c.sp) }
+func (c *cpu) peek32u() u32     { return get32u(c.sp) }
+func (c *cpu) peek64() i64      { return get64(c.sp) }
+func (c *cpu) peek64u() u64     { return get64u(c.sp) }
+func (c *cpu) peek32f() f32     { return get32f(c.sp) }
+func (c *cpu) peek64f() f64     { return get64f(c.sp) }
 func (c *cpu) peekPtr() uintptr { return getPtr(c.sp) }
 
-func (c *cpu) pushu8(v u8)   { c.trapOverflow(StackAlign); c.sp -= StackAlign; setu8(c.sp, v) }
-func (c *cpu) pushi8(v i8)   { c.trapOverflow(StackAlign); c.sp -= StackAlign; seti8(c.sp, v) }
-func (c *cpu) pushu16(v u16) { c.trapOverflow(StackAlign); c.sp -= StackAlign; setu16(c.sp, v) }
-func (c *cpu) pushi16(v i16) { c.trapOverflow(StackAlign); c.sp -= StackAlign; seti16(c.sp, v) }
-func (c *cpu) pushu32(v u32) { c.trapOverflow(StackAlign); c.sp -= StackAlign; setu32(c.sp, v) }
-func (c *cpu) pushi32(v i32) { c.trapOverflow(StackAlign); c.sp -= StackAlign; seti32(c.sp, v) }
-func (c *cpu) pushu64(v u64) { c.trapOverflow(StackAlign * 2); c.sp -= StackAlign * 2; setu64(c.sp, v) }
-func (c *cpu) pushi64(v i64) { c.trapOverflow(StackAlign * 2); c.sp -= StackAlign * 2; seti64(c.sp, v) }
-func (c *cpu) pushf32(v f32) { c.trapOverflow(StackAlign); c.sp -= StackAlign; setf32(c.sp, v) }
-func (c *cpu) pushf64(v f64) { c.trapOverflow(StackAlign * 2); c.sp -= StackAlign * 2; setf64(c.sp, v) }
+func (c *cpu) push8(v i8)    { c.push32(i32(v)) }
+func (c *cpu) push8u(v u8)   { c.push32u(u32(v)) }
+func (c *cpu) push16(v i16)  { c.push32(i32(v)) }
+func (c *cpu) push16u(v u16) { c.push32u(u32(v)) }
+func (c *cpu) push32(v i32)  { c.trapOverflow(StackAlign); c.sp -= StackAlign; set32(c.sp, v) }
+func (c *cpu) push32u(v u32) { c.trapOverflow(StackAlign); c.sp -= StackAlign; set32u(c.sp, v) }
+func (c *cpu) push64(v i64)  { c.trapOverflow(StackAlign * 2); c.sp -= StackAlign * 2; set64(c.sp, v) }
+func (c *cpu) push64u(v u64) { c.trapOverflow(StackAlign * 2); c.sp -= StackAlign * 2; set64u(c.sp, v) }
+func (c *cpu) push32f(v f32) { c.trapOverflow(StackAlign); c.sp -= StackAlign; set32f(c.sp, v) }
+func (c *cpu) push64f(v f64) { c.trapOverflow(StackAlign * 2); c.sp -= StackAlign * 2; set64f(c.sp, v) }
 func (c *cpu) pushPtr(v uintptr) {
 	c.trapOverflow(StackAlign * 2)
 	c.sp -= StackAlign * 2
 	setPtr(c.sp, v)
 }
 
-func (c *cpu) pop8() u8 {
+func (c *cpu) pop8() i8 {
 	c.trapUnderflow(StackAlign)
 	c.sp += StackAlign
-	return getu8(c.sp - StackAlign)
+	return get8(c.sp - StackAlign)
 }
 
-func (c *cpu) pop16() u16 {
+func (c *cpu) pop8u() u8 {
 	c.trapUnderflow(StackAlign)
 	c.sp += StackAlign
-	return getu16(c.sp - StackAlign)
+	return get8u(c.sp - StackAlign)
 }
 
-func (c *cpu) pop32() u32 {
+func (c *cpu) pop16() i16 {
 	c.trapUnderflow(StackAlign)
 	c.sp += StackAlign
-	return getu32(c.sp - StackAlign)
+	return get16(c.sp - StackAlign)
 }
 
-func (c *cpu) pop64() u64 {
+func (c *cpu) pop16u() u16 {
+	c.trapUnderflow(StackAlign)
+	c.sp += StackAlign
+	return get16u(c.sp - StackAlign)
+}
+
+func (c *cpu) pop32() i32 {
+	c.trapUnderflow(StackAlign)
+	c.sp += StackAlign
+	return get32(c.sp - StackAlign)
+}
+
+func (c *cpu) pop32u() u32 {
+	c.trapUnderflow(StackAlign)
+	c.sp += StackAlign
+	return get32u(c.sp - StackAlign)
+}
+
+func (c *cpu) pop64() i64 {
 	c.trapUnderflow(StackAlign * 2)
 	c.sp += StackAlign * 2
-	return getu64(c.sp - StackAlign*2)
+	return get64(c.sp - StackAlign*2)
 }
 
-func (c *cpu) popf32() f32 {
-	c.trapUnderflow(StackAlign)
-	c.sp += StackAlign
-	return getf32(c.sp - StackAlign)
-}
-
-func (c *cpu) popf64() f64 {
+func (c *cpu) pop64u() u64 {
 	c.trapUnderflow(StackAlign * 2)
 	c.sp += StackAlign * 2
-	return getf64(c.sp - StackAlign*2)
+	return get64u(c.sp - StackAlign*2)
+}
+
+func (c *cpu) pop32f() f32 {
+	c.trapUnderflow(StackAlign)
+	c.sp += StackAlign
+	return get32f(c.sp - StackAlign)
+}
+
+func (c *cpu) pop64f() f64 {
+	c.trapUnderflow(StackAlign * 2)
+	c.sp += StackAlign * 2
+	return get64f(c.sp - StackAlign*2)
 }
 
 func (c *cpu) popPtr() uintptr {
@@ -134,7 +162,7 @@ func (c *cpu) stackDump(depth int) {
 		}
 
 		for j := 0; j < int(StackAlign); j++ {
-			fmt.Printf("0x%02x ", getu8(p-uintptr(1+j)))
+			fmt.Printf("0x%02x ", get8u(p-uintptr(1+j)))
 		}
 
 		fmt.Print("\x1b[0m")
