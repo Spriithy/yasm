@@ -57,3 +57,35 @@ func (c *cpu) popLocal64(offset int)  { setu64(c.fp+uintptr(offset), c.pop64()) 
 func (c *cpu) popLocalf32(offset int) { setf32(c.fp+uintptr(offset), c.popf32()) }
 func (c *cpu) popLocalf64(offset int) { setf64(c.fp+uintptr(offset), c.popf64()) }
 func (c *cpu) popLocalPtr(offset int) { setPtr(c.fp+uintptr(offset), c.popPtr()) }
+
+func (c *cpu) getGlobal8(offset int) u8        { return getu8(c.bp + uintptr(offset)) }
+func (c *cpu) getGlobal16(offset int) u16      { return getu16(c.bp + uintptr(offset)) }
+func (c *cpu) getGlobal32(offset int) u32      { return getu32(c.bp + uintptr(offset)) }
+func (c *cpu) getGlobal64(offset int) u64      { return getu64(c.bp + uintptr(offset)) }
+func (c *cpu) getGlobalf32(offset int) f32     { return getf32(c.bp + uintptr(offset)) }
+func (c *cpu) getGlobalf64(offset int) f64     { return getf64(c.bp + uintptr(offset)) }
+func (c *cpu) getGlobalPtr(offset int) uintptr { return getPtr(c.bp + uintptr(offset)) }
+
+func (c *cpu) setGlobal8(offset int, v u8)        { setu8(c.bp+uintptr(offset), v) }
+func (c *cpu) setGlobal16(offset int, v u16)      { setu16(c.bp+uintptr(offset), v) }
+func (c *cpu) setGlobal32(offset int, v u32)      { setu32(c.bp+uintptr(offset), v) }
+func (c *cpu) setGlobal64(offset int, v u64)      { setu64(c.bp+uintptr(offset), v) }
+func (c *cpu) setGlobalf32(offset int, v f32)     { setf32(c.bp+uintptr(offset), v) }
+func (c *cpu) setGlobalf64(offset int, v f64)     { setf64(c.bp+uintptr(offset), v) }
+func (c *cpu) setGlobalPtr(offset int, v uintptr) { setPtr(c.bp+uintptr(offset), v) }
+
+func (c *cpu) pushGlobal8(offset int)   { c.pushu8(getu8(c.bp + uintptr(offset))) }
+func (c *cpu) pushGlobal16(offset int)  { c.pushu16(getu16(c.bp + uintptr(offset))) }
+func (c *cpu) pushGlobal32(offset int)  { c.pushu32(getu32(c.bp + uintptr(offset))) }
+func (c *cpu) pushGlobal64(offset int)  { c.pushu64(getu64(c.bp + uintptr(offset))) }
+func (c *cpu) pushGlobalf32(offset int) { c.pushf32(getf32(c.bp + uintptr(offset))) }
+func (c *cpu) pushGlobalf64(offset int) { c.pushf64(getf64(c.bp + uintptr(offset))) }
+func (c *cpu) pushGlobalPtr(offset int) { c.pushPtr(getPtr(c.bp + uintptr(offset))) }
+
+func (c *cpu) popGlobal8(offset int)   { setu8(c.bp+uintptr(offset), c.pop8()) }
+func (c *cpu) popGlobal16(offset int)  { setu16(c.bp+uintptr(offset), c.pop16()) }
+func (c *cpu) popGlobal32(offset int)  { setu32(c.bp+uintptr(offset), c.pop32()) }
+func (c *cpu) popGlobal64(offset int)  { setu64(c.bp+uintptr(offset), c.pop64()) }
+func (c *cpu) popGlobalf32(offset int) { setf32(c.bp+uintptr(offset), c.popf32()) }
+func (c *cpu) popGlobalf64(offset int) { setf64(c.bp+uintptr(offset), c.popf64()) }
+func (c *cpu) popGlobalPtr(offset int) { setPtr(c.bp+uintptr(offset), c.popPtr()) }
