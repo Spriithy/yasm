@@ -5,26 +5,30 @@ import (
 	"os"
 )
 
-type errno = int
-
 const (
 	StackUnderflow = iota + 1
 	StackOverflow
+	UnreachableError
+	UnknownOpcodeError
 	NoEntryPoint
 	ArithmeticOverflow
 	errnoMax
 )
 
-var errnoStr = map[errno]string{
+var errnoStr = map[int]string{
 	StackUnderflow:     "StackUnderflow",
 	StackOverflow:      "StackOverflow",
+	UnreachableError:   "UnreachableError",
+	UnknownOpcodeError: "UnknownOpcodeError",
 	NoEntryPoint:       "NoEntryPoint",
 	ArithmeticOverflow: "ArithmeticOverflow",
 }
 
-var errnoCode = map[errno]int{
+var errnoCode = map[int]int{
 	StackUnderflow:     ExitFailure,
 	StackOverflow:      ExitFailure,
+	UnreachableError:   ExitFailure,
+	UnknownOpcodeError: ExitFailure,
 	NoEntryPoint:       ExitFailure,
 	ArithmeticOverflow: ExitFailure,
 }
@@ -33,7 +37,7 @@ func (c *cpu) SetTrapMessage(message string) {
 	c.tm = message
 }
 
-func (c *cpu) Trap(n errno) {
+func (c *cpu) Trap(n int) {
 	if n >= errnoMax || n < 0 {
 		fmt.Printf("\x1b[31merror: unknown Trap at 0x%x\x1b[0m\n", c.ta)
 		if c.tm != "" {
@@ -51,7 +55,7 @@ func (c *cpu) Trap(n errno) {
 	os.Exit(errnoCode[n])
 }
 
-func (c *cpu) TrapAnonymous(n errno) {
+func (c *cpu) TrapAnonymous(n int) {
 	if n >= errnoMax || n < 0 {
 		fmt.Printf("\x1b[31merror: unknown Trap at 0x%x\x1b[0m\n", c.ta)
 		if c.tm != "" {

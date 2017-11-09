@@ -17,8 +17,6 @@ type (
 
 	f32 = float32
 	f64 = float64
-
-	Type = int
 )
 
 const (
@@ -44,7 +42,7 @@ var (
 	__f64__ f64
 	__ptr__ uintptr
 
-	sizeOf = map[Type]uintptr{
+	SizeOf = map[int]uintptr{
 		U8:  unsafe.Sizeof(__u8__),
 		I8:  unsafe.Sizeof(__u8__),
 		U16: unsafe.Sizeof(__u16__),

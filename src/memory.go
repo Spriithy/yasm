@@ -26,6 +26,17 @@ func set32f(p uintptr, v f32)     { *(*f32)(unsafe.Pointer(p)) = v }
 func set64f(p uintptr, v f64)     { *(*f64)(unsafe.Pointer(p)) = v }
 func setPtr(p uintptr, v uintptr) { *(*uintptr)(unsafe.Pointer(p)) = v }
 
+func deref8(p []u8, offset uintptr) i8    { return i8(p[offset]) }
+func deref8u(p []u8, offset uintptr) u8   { return p[offset] }
+func deref16(p []u8, offset uintptr) i16  { return *(*i16)(unsafe.Pointer(&p[offset])) }
+func deref16u(p []u8, offset uintptr) u16 { return *(*u16)(unsafe.Pointer(&p[offset])) }
+func deref32(p []u8, offset uintptr) i32  { return *(*i32)(unsafe.Pointer(&p[offset])) }
+func deref32u(p []u8, offset uintptr) u32 { return *(*u32)(unsafe.Pointer(&p[offset])) }
+func deref32f(p []u8, offset uintptr) f32 { return *(*f32)(unsafe.Pointer(&p[offset])) }
+func deref64(p []u8, offset uintptr) i64  { return *(*i64)(unsafe.Pointer(&p[offset])) }
+func deref64u(p []u8, offset uintptr) u64 { return *(*u64)(unsafe.Pointer(&p[offset])) }
+func deref64f(p []u8, offset uintptr) f64 { return *(*f64)(unsafe.Pointer(&p[offset])) }
+
 func (c *cpu) getLocal8(offset int) i8        { return get8(c.fp + uintptr(offset)) }
 func (c *cpu) getLocal8u(offset int) u8       { return get8u(c.fp + uintptr(offset)) }
 func (c *cpu) getLocal16(offset int) i16      { return get16(c.fp + uintptr(offset)) }
@@ -109,10 +120,10 @@ func (c *cpu) pushGlobal32f(offset int) { c.push32f(get32f(c.bp + uintptr(offset
 func (c *cpu) pushGlobal64f(offset int) { c.push64f(get64f(c.bp + uintptr(offset))) }
 func (c *cpu) pushGlobalPtr(offset int) { c.pushPtr(getPtr(c.bp + uintptr(offset))) }
 
-func (c *cpu) popGlobal8(offset int)   { set8(c.bp+uintptr(offset), c.pop8()) }
-func (c *cpu) popGlobal8u(offset int)  { set8u(c.bp+uintptr(offset), c.pop8u()) }
-func (c *cpu) popGlobal16(offset int)  { set16(c.bp+uintptr(offset), c.pop16()) }
-func (c *cpu) popGlobal16u(offset int) { set16u(c.bp+uintptr(offset), c.pop16u()) }
+func (c *cpu) popGlobal8(offset int)   { set32(c.bp+uintptr(offset), i32(c.pop8())) }
+func (c *cpu) popGlobal8u(offset int)  { set32u(c.bp+uintptr(offset), u32(c.pop8u())) }
+func (c *cpu) popGlobal16(offset int)  { set32(c.bp+uintptr(offset), i32(c.pop16())) }
+func (c *cpu) popGlobal16u(offset int) { set32u(c.bp+uintptr(offset), u32(c.pop16u())) }
 func (c *cpu) popGlobal32(offset int)  { set32(c.bp+uintptr(offset), c.pop32()) }
 func (c *cpu) popGlobal32u(offset int) { set32u(c.bp+uintptr(offset), c.pop32u()) }
 func (c *cpu) popGlobal64(offset int)  { set64(c.bp+uintptr(offset), c.pop64()) }

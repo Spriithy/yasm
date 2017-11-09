@@ -10,6 +10,6 @@ type cpu struct {
 	tm string  // Trap message
 	ec int     // exit code
 
-	module *Module
+	Module *Module
 	fn     *Function
 }

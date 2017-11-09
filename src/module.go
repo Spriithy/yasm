@@ -6,10 +6,10 @@ import (
 )
 
 type Module struct {
-	Name         string
-	Libs         map[string]*Module
-	Funcs        map[string]uintptr
-	Instructions []Opcode
+	Name      string
+	Funcs     map[string]uintptr
+	FuncNames map[uintptr]string
+	Code      []Opcode
 }
 
 func (m *Module) RegisterFunc(name string, offset uintptr) {
@@ -18,4 +18,5 @@ func (m *Module) RegisterFunc(name string, offset uintptr) {
 		os.Exit(ExitFailure)
 	}
 	m.Funcs[name] = offset
+	m.FuncNames[offset] = name
 }

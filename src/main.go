@@ -1,7 +1,6 @@
 package yasm
 
 import (
-	"fmt"
 	"unsafe"
 )
 
@@ -12,36 +11,28 @@ func Main() {
 	c.bp = c.sp - StackAlign
 	c.fp = c.sp - StackAlign
 
-	c.module = &Module{
-		Name:         "test.yasm",
-		Libs:         nil,
-		Funcs:        make(map[string]uintptr),
-		Instructions: []Opcode{},
+	c.Module = &Module{
+		Name:      "test.yasm",
+		Funcs:     make(map[string]uintptr),
+		FuncNames: make(map[uintptr]string),
+		Code: []Opcode{
+			Pushl64, 0x04,
+			Pushl64, 0x0c,
+			Popl64, 0x04,
+			Popl64, 0x0c,
+			Syscall, 0x80,
+			Unreachable,
+		},
 	}
 
-	c.module.RegisterFunc("main", 0)
+	c.Module.RegisterFunc("main", 0)
 
 	c.exec([]string{
 		"test.yasm",
 		"--version",
 	})
 
-	c.fp = c.sp
-
-	c.pushLocalPtr(4)
-	c.pushLocalPtr(12)
-
 	c.stackDump(0)
 
-	fmt.Printf("argv[0] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(4))))
-	fmt.Printf("argv[1] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(12))))
-
-	c.popLocalPtr(4)
-	c.popLocalPtr(12)
-	fmt.Print("swap...")
-
-	c.stackDump(0)
-
-	fmt.Printf("argv[0] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(4))))
-	fmt.Printf("argv[1] : %s\n", *(*string)(unsafe.Pointer(c.getLocalPtr(12))))
+	c.Module.Disas()
 }

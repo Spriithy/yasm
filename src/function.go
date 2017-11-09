@@ -6,3 +6,7 @@ type Function struct {
 	Caller *Function
 	pc     uintptr
 }
+
+func (c *cpu) makeFunc(caller *Function, pc uintptr) {
+
+}
