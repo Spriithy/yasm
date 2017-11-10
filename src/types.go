@@ -71,3 +71,12 @@ var (
 		"ptr",
 	}
 )
+
+func decodeType(t u8) string {
+	var str string
+	if t>>7 == 1 {
+		str += "[]"
+	}
+	str += TypeName[t&0xf]
+	return str
+}
