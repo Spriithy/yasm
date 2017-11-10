@@ -3,34 +3,35 @@ package yasm
 import "unsafe"
 
 type (
-	u8 = uint8
 	i8 = int8
+	u8 = uint8
 
-	u16 = uint16
 	i16 = int16
+	u16 = uint16
 
-	u32 = uint32
 	i32 = int32
+	u32 = uint32
 
-	u64 = uint64
 	i64 = int64
+	u64 = uint64
 
 	f32 = float32
 	f64 = float64
 )
 
 const (
-	U8 = iota
-	I8
-	U16
+	I8 = iota
+	U8
 	I16
-	U32
+	U16
 	I32
-	U64
+	U32
 	I64
+	U64
 	F32
 	F64
 	Ptr
+	Array = 1 << 7
 )
 
 var (
@@ -42,17 +43,31 @@ var (
 	__f64__ f64
 	__ptr__ uintptr
 
-	SizeOf = map[int]uintptr{
-		U8:  unsafe.Sizeof(__u8__),
-		I8:  unsafe.Sizeof(__u8__),
-		U16: unsafe.Sizeof(__u16__),
-		I16: unsafe.Sizeof(__u16__),
-		U32: unsafe.Sizeof(__u32__),
-		I32: unsafe.Sizeof(__u32__),
-		U64: unsafe.Sizeof(__u64__),
-		I64: unsafe.Sizeof(__u64__),
-		F32: unsafe.Sizeof(__f32__),
-		F64: unsafe.Sizeof(__f64__),
-		Ptr: unsafe.Sizeof(__ptr__),
+	SizeOf = []uintptr{
+		unsafe.Sizeof(__u8__),
+		unsafe.Sizeof(__u8__),
+		unsafe.Sizeof(__u16__),
+		unsafe.Sizeof(__u16__),
+		unsafe.Sizeof(__u32__),
+		unsafe.Sizeof(__u32__),
+		unsafe.Sizeof(__u64__),
+		unsafe.Sizeof(__u64__),
+		unsafe.Sizeof(__f32__),
+		unsafe.Sizeof(__f64__),
+		unsafe.Sizeof(__ptr__),
+	}
+
+	TypeName = []string{
+		"i8",
+		"u8",
+		"i16",
+		"u16",
+		"i32",
+		"u32",
+		"i64",
+		"u64",
+		"f32",
+		"f64",
+		"ptr",
 	}
 )
